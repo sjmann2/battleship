@@ -25,6 +25,15 @@ describe Cell do
         expect(cell.ship).to eq(cruiser)
     end
 
+    it 'can be fired upon' do
+        cell = Cell.new('B4')
+        cruiser = Ship.new("Cruiser", 3)
+        cell.place_ship(cruiser)
+
+        expect(cell.fired_upon?).to be false
+        cell.fire_upon
+        expect(cell.fired_upon?).to be true
+    end
 
 
 end
