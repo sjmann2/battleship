@@ -28,4 +28,9 @@ class Board
     def valid_coordinate?(coordinate)
         @cells.keys.include?(coordinate)
     end
+
+    def valid_placement?(ship_instance, coordinate_array)
+        
+
+
 end
