@@ -21,7 +21,19 @@ describe Ship do
 
     it 'has method to determine if sunk' do
     cruiser = Ship.new("Cruiser", 3)
+    
     expect(cruiser.sunk?).to be(false)
+    cruiser.hit
+    cruiser.hit
+    expect(cruiser.sunk?).to be(false)
+    cruiser.hit
+    expect(cruiser.sunk?).to be(true)
     end
- 
+
+    it 'can get hit' do
+    cruiser = Ship.new("Cruiser", 3)
+    expect(cruiser.health).to be(3)
+    cruiser.hit
+    expect(cruiser.health).to be(2)
+    end
 end
