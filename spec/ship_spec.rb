@@ -14,4 +14,14 @@ describe Ship do
     expect(cruiser.length).to be(3)
     end
 
+    it 'has default health equal to length' do
+    cruiser = Ship.new("Cruiser", 3)
+    expect(cruiser.health).to be(3)
+    end
+
+    it 'has method to determine if sunk' do
+    cruiser = Ship.new("Cruiser", 3)
+    expect(cruiser.sunk?).to be(false)
+    end
+ 
 end
