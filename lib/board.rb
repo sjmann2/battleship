@@ -30,7 +30,43 @@ class Board
     end
 
     def valid_placement?(ship_instance, coordinate_array)
-        
+        #iterate through array with valid coordinate method,
+        # if all coordinates are all valid, then the array will remain intact and be equal to original
+        coordinate_array == 
+            coordinate_array.reject do |individual_coordinate|
+                valid_coordinate(individual_coordinate)
+            end
+        #check coordinates against length of ship
+        ship_instance.length == coordinate_array.length
+        #coordiantes are consecutive
+        #numbers are consecutive
+        numbers_coordinate_array = coordinate_array.map do |individual_coordinate|
+            individual_coordinate[1]
+        end
+        times_run = 0
+        numbers_comparison_array = []
+        until times = ship.length
+            numbers_comparison_array << numbers_coordinate_array[0] + times_run
+            times_run += 1
+        end
+        numbers_coordinate_array == numbers_comparison_array
+        #or if the numbers are all the same
+        (ship.length).times { numbers_same_array << numbers_coordinate_array[0] }
+        numbers_coordinate_array == numbers_same_array
+        #letters are consecutive
+        letters_coordinate_array = coordinate_array.map do |individual_coordinate|
+            individual_coordinate[0].ord
+        end 
+        times_run = 0
+        letters_comparison_array = []
+        until times = ship.length
+            letters_comparison_array << letters_coordinate_array[0] + times_run
+            times_run += 1
+        end
+        letters_coordinate_array == letters_comparison_array
+        #letters are all the same
+        (ship.length).times { letters_same_array << letters_coordinate_array[0] }
+        letters_coordinate_array == letters_same_array
 
 
 end
