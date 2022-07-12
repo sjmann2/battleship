@@ -14,6 +14,7 @@ class Ship
     end
 
     def hit
+        return if @health.zero?
         @health -= 1
     end
 end

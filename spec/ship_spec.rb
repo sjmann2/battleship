@@ -28,6 +28,8 @@ describe Ship do
     expect(cruiser.sunk?).to be(false)
     cruiser.hit
     expect(cruiser.sunk?).to be(true)
+    cruiser.hit
+    expect(cruiser.sunk?).to be(true)
     end
 
     it 'can get hit' do
