@@ -31,6 +31,8 @@ class Cell
     
     def render(see_ships = false)
         # Comment out about what each scenario means for furth condensing
+        #condense using order of read and removing of 
+        #Combine period output into one
         if empty? == true && see_ships == false && @shot_at == false
             "."
         elsif empty? == false && see_ships == true && @shot_at == false

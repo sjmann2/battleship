@@ -48,7 +48,7 @@ class Board
                     false
                 end
         else
-                false
+          false
         end
     end
                         
@@ -63,6 +63,7 @@ class Board
         end
         coordinate_array == valid_coordinates_array
     end
+
     def consecutive_numbers_comparison(coordinate_array, ship_instance)
         numbers_coordinate_array = coordinate_array.map do |individual_coordinate|
             individual_coordinate[1]
