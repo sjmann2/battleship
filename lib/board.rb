@@ -30,25 +30,35 @@ class Board
     end
 
     def valid_placement?(ship_instance, coordinate_array)
+        if !(coordinate_array.map do |coordinate|
+            @cells[coordinate].empty?
+                end.include?(false))
+    
+        #[T, T, T].include?(false) => false
+        #if cells coordinate includes false returns true
+
         #iterate through array with valid coordinate method,
         # if all coordinates are all valid, then the array will remain intact and be equal to original
-        if coordinates_are_on_board(coordinate_array)
-        #check coordinates against length of ship
-                if ship_instance.length == coordinate_array.length
-        #coordiantes are consecutive
-        #numbers are consecutive
-                    if consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance)
-                        true
-                    elsif same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance)
-                        true
+            if coordinates_are_on_board(coordinate_array)
+            #check coordinates against length of ship
+                    if ship_instance.length == coordinate_array.length
+            #coordiantes are consecutive
+            #numbers are consecutive
+                        if consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance)
+                            true
+                        elsif same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance)
+                            true
+                        else
+                            false
+                        end
                     else
                         false
                     end
-                else
-                    false
-                end
-        else
-          false
+            else
+            false
+            end
+        else 
+        false
         end
     end
                         
@@ -113,6 +123,9 @@ class Board
         #link back to cell class
         #access values in hash
         #place the same ship in cell objects
-
+        coordinate_array.each do |coordinate|
+            @cells[coordinate].place_ship(ship_instance)
+            #cell_1
+        end  
     end
 end
