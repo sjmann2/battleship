@@ -32,41 +32,78 @@ class Board
     def valid_placement?(ship_instance, coordinate_array)
         #iterate through array with valid coordinate method,
         # if all coordinates are all valid, then the array will remain intact and be equal to original
-        coordinate_array == 
-            coordinate_array.reject do |individual_coordinate|
-                valid_coordinate(individual_coordinate)
-            end
+        if coordinates_are_on_board(coordinate_array)
         #check coordinates against length of ship
-        ship_instance.length == coordinate_array.length
+                if ship_instance.length == coordinate_array.length
         #coordiantes are consecutive
         #numbers are consecutive
+                    if consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance)
+                        true
+                    elsif same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance)
+                        true
+                    else
+                        false
+                    end
+                else
+                    false
+                end
+        else
+                false
+        end
+    end
+                        
+        #or if the numbers are all the same
+
+        #letters are consecutive
+
+        #letters are all the same
+    def coordinates_are_on_board(coordinate_array)
+        valid_coordinates_array = coordinate_array.reject do |individual_coordinate|
+            !@cells.keys.include?(individual_coordinate)
+        end
+        coordinate_array == valid_coordinates_array
+    end
+    def consecutive_numbers_comparison(coordinate_array, ship_instance)
         numbers_coordinate_array = coordinate_array.map do |individual_coordinate|
             individual_coordinate[1]
         end
         times_run = 0
         numbers_comparison_array = []
-        until times = ship.length
-            numbers_comparison_array << numbers_coordinate_array[0] + times_run
+        until times_run == ship_instance.length
+            numbers_comparison_array << (numbers_coordinate_array[0].to_i + times_run).to_s
             times_run += 1
         end
         numbers_coordinate_array == numbers_comparison_array
-        #or if the numbers are all the same
-        (ship.length).times { numbers_same_array << numbers_coordinate_array[0] }
+    end
+
+    def same_numbers_comparison(coordinate_array, ship_instance)
+        numbers_coordinate_array = coordinate_array.map do |individual_coordinate|
+            individual_coordinate[1]
+        end
+        numbers_same_array = []
+        (ship_instance.length).times { numbers_same_array << numbers_coordinate_array[0] }
         numbers_coordinate_array == numbers_same_array
-        #letters are consecutive
+    end
+
+    def consecutive_letters_comparison(coordinate_array, ship_instance)
         letters_coordinate_array = coordinate_array.map do |individual_coordinate|
             individual_coordinate[0].ord
         end 
         times_run = 0
         letters_comparison_array = []
-        until times = ship.length
-            letters_comparison_array << letters_coordinate_array[0] + times_run
+        until times_run == ship_instance.length
+            letters_comparison_array << (letters_coordinate_array[0].to_i + times_run)
             times_run += 1
         end
         letters_coordinate_array == letters_comparison_array
-        #letters are all the same
-        (ship.length).times { letters_same_array << letters_coordinate_array[0] }
+    end
+
+    def same_letters_comparison(coordinate_array, ship_instance)
+        letters_coordinate_array = coordinate_array.map do |individual_coordinate|
+            individual_coordinate[0].ord
+        end 
+        letters_same_array = []
+        (ship_instance.length).times { letters_same_array << letters_coordinate_array[0] }
         letters_coordinate_array == letters_same_array
-
-
+    end
 end
