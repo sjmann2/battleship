@@ -107,4 +107,12 @@ class Board
         (ship_instance.length).times { letters_same_array << letters_coordinate_array[0] }
         letters_coordinate_array == letters_same_array
     end
+
+    def place(ship_instance, coordinate_array)
+        #coordinate array inputted corresponds to specific cell objects
+        #link back to cell class
+        #access values in hash
+        #place the same ship in cell objects
+
+    end
 end
