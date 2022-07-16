@@ -22,7 +22,7 @@ class Cell
 
     def fire_upon
         if @shot_at == true
-        elsif
+        else
             @shot_at = true
             if !empty? 
                 @ship.hit
@@ -34,25 +34,18 @@ class Cell
         if empty? == false && @shot_at == true && @ship.sunk? == false
             "H"
         #if there is a ship, it has been shot at but hasn't been sunk
-
         elsif empty? == false && see_ships == true && @shot_at == false
             "S"
         #if there is a ship, see ships is true, hasn't been shot at
         elsif empty? == false && @shot_at == true && @ship.sunk? == true
             "X"
         #if there's a ship, it has been shot at and it has been sunk
-
         elsif empty? == true && @shot_at == true
             "M"
-        #if there's no ship, hasn't been shot at
-
-        elsif empty? == false && see_ships == false && @shot_at == false
+        #if there's no ship, has been shot at
+        elsif @shot_at == false
             "."
-        #if there is a ship, see ships is false, hasn't been shot at
-
-        elsif empty? == true && @shot_at == false
-            "."
-        #if there's no ship, see ships is false, hasn't been shot at
+        #if it's empty and hasn't been shot at
         end
     end
 end
