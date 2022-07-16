@@ -2,6 +2,7 @@ require './lib/board'
 require './lib/ship'
 require './lib/cell'
 require './lib/game'
+require './lib/cell_generator'
 
 describe Game do
   it 'exists' do
