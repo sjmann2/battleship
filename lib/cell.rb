@@ -22,7 +22,7 @@ class Cell
 
     def fire_upon
         if @shot_at == true
-        elsif
+        else
             @shot_at = true
             if !empty? 
                 @ship.hit
@@ -31,27 +31,21 @@ class Cell
     end
     
     def render(see_ships = false)
-        # Comment out about what each scenario means for furth condensing
-        #condense using order of read and removing of 
-        #Combine period output into one
-        if empty? == true && see_ships == false && @shot_at == false
-            "."
+        if empty? == false && @shot_at == true && @ship.sunk? == false
+            "H"
+        #if there is a ship, it has been shot at but hasn't been sunk
         elsif empty? == false && see_ships == true && @shot_at == false
             "S"
-        elsif empty? == true && see_ships == true && @shot_at == false
-            "."
-        elsif empty? == false && see_ships == false && @shot_at == false
-            "."
-        elsif empty? == true && @shot_at == true
-            "M"
-        elsif empty? == false && @shot_at == true && @ship.sunk? == false
-            "H"
+        #if there is a ship, see ships is true, hasn't been shot at
         elsif empty? == false && @shot_at == true && @ship.sunk? == true
             "X"
-        else
-            "Something went wrong!!"
+        #if there's a ship, it has been shot at and it has been sunk
+        elsif empty? == true && @shot_at == true
+            "M"
+        #if there's no ship, has been shot at
+        elsif @shot_at == false
+            "."
+        #if it's empty and hasn't been shot at
         end
     end
-        
-
 end
