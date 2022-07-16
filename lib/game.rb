@@ -31,18 +31,19 @@ class Game
   end
 
   def take_turn(player_shot, computer_shot)
+
+
+      # if board_computer.valid_coordinate?(player_shot) && !board_computer.cells[player_shot].shot_at
+      #   board_computer.cells[player_shot].fire_upon
+      # else
+      #   "Something went wrong!"
+      # end
+      board_computer.cells[player_shot].fire_upon
+      board_player.cells[computer_shot].fire_upon
       puts "=============COMPUTER BOARD============="
       puts board_computer.render
       puts "==============PLAYER BOARD=============="
       puts board_player.render(true)
-
-      if board_computer.valid_coordinate?(player_shot) && !board_computer.cells[player_shot].shot_at
-        board_computer.cells[player_shot].fire_upon
-      else
-        "Something went wrong!"
-      end
-
-      board_player.cells[computer_shot].fire_upon
       #feedback here!
       puts shot_feedback_player_line(player_shot)
       puts shot_feedback_computer_line(computer_shot)

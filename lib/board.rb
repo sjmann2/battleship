@@ -31,16 +31,16 @@ class Board
     end
 
     def valid_placement?(ship_instance, coordinate_array)
+      if coordinates_are_on_board(coordinate_array)
         if !(coordinate_array.map do |coordinate|
             @cells[coordinate].empty?
-                end.include?(false))
+          end.include?(false))
     
         #[T, T, T].include?(false) => false
         #if cells coordinate includes false returns true
 
         #iterate through array with valid coordinate method,
         # if all coordinates are all valid, then the array will remain intact and be equal to original
-            if coordinates_are_on_board(coordinate_array)
             #check coordinates against length of ship
                     if ship_instance.length == coordinate_array.length
             #coordiantes are consecutive
