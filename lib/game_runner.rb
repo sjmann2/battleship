@@ -9,8 +9,29 @@ require './lib/cell_generator'
 def run_game
     game = Game.new
     #Computer places ships
-    game.place_ships_computer(game.cruiser_computer, ['A1', 'A2', 'A3'])
-    game.place_ships_computer(game.submarine_computer, ['B1', 'B2'])
+    # game.place_ships_computer(game.cruiser_computer, ['A1', 'A2', 'A3'])
+    # game.place_ships_computer(game.submarine_computer, ['B1', 'B2'])
+    #Random Ship placement
+    #generate random(but valid!) arrays based on ship length
+    #picks a random spot
+    computer_ship_placement_array = []
+    ship_instance = game.cruiser_computer
+    def random_computer_ship_placement(ship_instance)
+      until game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array) == true && computer_ship_placement_array == []
+
+        until computer_ship_placement_array.length == ship_instance.length
+          computer_ship_placement_array << game.board_computer.cells.keys.sample
+        end
+require 'pry'; binding.pry
+        if !game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array)
+          computer_ship_placement_array = []
+        end
+
+      end
+      computer_ship_placement_array
+    end
+
+    require 'pry'; binding.pry
     
     #Player places ships
     p "I have laid out my ships on the grid."

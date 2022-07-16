@@ -22,7 +22,7 @@ class Cell
 
     def fire_upon
         if @shot_at == true
-        elsif
+        else
             @shot_at = true
             if !empty? 
                 @ship.hit
