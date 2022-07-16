@@ -3,8 +3,8 @@ class CellGenerator
                 :width
                 
     def initialize(length = 4, width = 4)
-    @length = length
-    @width = width 
+        @length = length
+        @width = width
     end
 
     def cells
@@ -16,8 +16,8 @@ class CellGenerator
         #ordinal value of A = 65, so 65 + length 4-1 = 68
         #68 back into a character = D
         #Turn all of it back into an array
-        width
-        .map {|num| length.map {|letter| letter + num.to_s }}
+        @width
+        .map {|num| @length.map {|letter| letter + num.to_s }}
         .flatten!
         .map {|coordinate| [coordinate, Cell.new(coordinate)]}
         .to_h
