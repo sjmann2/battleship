@@ -4,6 +4,7 @@ require "./lib/cell"
 require "./lib/game"
 require "./lib/cell_generator"
 require "./lib/player"
+require "./lib/computer"
 
 describe Game do
   it "exists" do

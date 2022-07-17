@@ -4,6 +4,7 @@ require "./lib/cell"
 require "./lib/game"
 require "./lib/cell_generator"
 require "./lib/player"
+require "./lib/computer"
 
 describe Computer do
     it "exists" do
@@ -33,7 +34,13 @@ describe Computer do
       expect(computer.place_ships(computer.submarine, ["B3", "B2"])).to eq("Invalid coordinates try again")
     end
 
-
-
+    it 'can generate random valid ship placements' do
+      computer = Computer.new
+      50.times do
+      expect(valid_placement?(
+              computer.cruiser,
+              random_computer_ship_placement(computer.cruiser))).to eq(true)
+      end
+    end
       
 end
