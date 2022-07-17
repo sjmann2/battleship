@@ -28,7 +28,6 @@ describe Game do
     game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
     game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
 
-    #(player's inputted shot, computer shot)
     expect(game.computer.board.cells["A4"].render).to eq(".")
     expect(game.player.board.cells["A4"].render).to eq(".")
 
@@ -49,14 +48,8 @@ describe Game do
 
     game.take_turn("C2", "C2")
 
-    #CLI output and feedback isn't tested, render(true)
-
-    #Render both boards
-    #player shot => go into computer board, call the corresponding cell, run fire_upon method
-    #computer shot => go into player board, call the corresponding cell, run fire_upon method
-    #Reporting results of the shot (feedback!)
-    #Runs inside a loop until both ships of either player or computer are ship.sunk? = true
-
+    expect(game.computer.board.cells["C2"].render).to eq("M")
+    expect(game.player.board.cells["C2"].render).to eq("M")
   end
 
   it "knows when to end game" do
@@ -78,18 +71,6 @@ describe Game do
     expect(game.end_game?).to eq(true)
   end
 
-  xit "gives feedback on shots" do
-    game = Game.new
-
-    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
-    game.player.place_ships(game.player.submarine, ["B1", "B2"])
-    game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
-    game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
-    #take_turn test
-    expect(game.take_turn("A4", "A4")).to eq("")
-    #helper test
-    game.shot_feedback("A4", "A4")
-  end
 
   xit "places ships on board for both sides" do
     game = Game.new
