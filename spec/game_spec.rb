@@ -4,6 +4,7 @@ require "./lib/cell"
 require "./lib/game"
 require "./lib/cell_generator"
 require "./lib/player"
+require "./lib/computer"
 
 describe Game do
   it "exists" do
@@ -12,52 +13,38 @@ describe Game do
     expect(game).to be_instance_of(Game)
   end
 
-  it "automatically generates new ships and board" do
+  it "automatically generates player and computer" do
     game = Game.new
 
-    expect(game.cruiser_computer).to be_instance_of(Ship)
-    expect(game.submarine_computer).to be_instance_of(Ship)
-    expect(game.board_computer).to be_instance_of(Board)
-  end
-
-  it "can place ships" do
-    game = Game.new
-
-    game.place_ships_computer(game.cruiser_computer, ["A1", "A2", "A3"])
-    game.place_ships_computer(game.submarine_computer, ["B1", "B2"])
-    expect(game.board_computer.cells["A1"].ship).to eq(game.cruiser_computer)
-    expect(game.board_computer.cells["A2"].ship).to eq(game.cruiser_computer)
-    expect(game.board_computer.cells["A3"].ship).to eq(game.cruiser_computer)
-    expect(game.board_computer.cells["B1"].ship).to eq(game.submarine_computer)
-    expect(game.place_ships_computer(game.submarine_computer, ["B3", "B2"])).to eq("Invalid coordinates try again")
+    expect(game.computer).to be_instance_of(Computer)
+    expect(game.player).to be_instance_of(Player)
   end
 
   it "can take a turn" do
     game = Game.new
-    player = Player.new
 
     game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
     game.player.place_ships(game.player.submarine, ["B1", "B2"])
-    game.place_ships_computer(game.cruiser_computer, ["A1", "A2", "A3"])
-    game.place_ships_computer(game.submarine_computer, ["B1", "B2"])
+    game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
+    game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
 
     #(player's inputted shot, computer shot)
-    expect(game.board_computer.cells["A4"].render).to eq(".")
+    expect(game.computer.board.cells["A4"].render).to eq(".")
     expect(game.player.board.cells["A4"].render).to eq(".")
 
     game.take_turn("A4", "A4")
 
-    expect(game.board_computer.cells["A4"].render).to eq("M")
+    expect(game.computer.board.cells["A4"].render).to eq("M")
     expect(game.player.board.cells["A4"].render).to eq("M")
 
     game.take_turn("A1", "B1")
 
-    expect(game.board_computer.cells["A1"].render).to eq("H")
+    expect(game.computer.board.cells["A1"].render).to eq("H")
     expect(game.player.board.cells["B1"].render).to eq("H")
 
     game.take_turn("A2", "B2")
 
-    expect(game.board_computer.cells["A2"].render).to eq("H")
+    expect(game.computer.board.cells["A2"].render).to eq("H")
     expect(game.player.board.cells["B2"].render).to eq("X")
 
     game.take_turn("C2", "C2")
@@ -74,21 +61,19 @@ describe Game do
 
   it "knows when to end game" do
     game = Game.new
-    player = Player.new
 
     game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
-    game.player.place_ships(game.player.cruiser, ["B1", "B2"])
-    game.place_ships_computer(game.cruiser_computer, ["A1", "A2", "A3"])
-    game.place_ships_computer(game.submarine_computer, ["B1", "B2"])
+    game.player.place_ships(game.player.submarine, ["B1", "B2"])
+    game.computer.place_all_ships
 
-    game.take_turn("A2", "A4")
-    game.take_turn("A1", "B1")
-    game.take_turn("A3", "B2")
+    game.take_turn("A2", "A2")
+    game.take_turn("A1", "A1")
+    game.take_turn("A3", "A3")
 
     expect(game.end_game?).to eq(false)
 
-    game.take_turn("B1", "C2")
-    game.take_turn("B2", "C3")
+    game.take_turn("B1", "B1")
+    game.take_turn("B2", "B2")
 
     expect(game.end_game?).to eq(true)
   end
@@ -96,10 +81,10 @@ describe Game do
   xit "gives feedback on shots" do
     game = Game.new
 
-    game.player.place_ships(game.cruiser_player, ["A1", "A2", "A3"])
-    game.player.place_ships(game.submarine_player, ["B1", "B2"])
-    game.place_ships_computer(game.cruiser_computer, ["A1", "A2", "A3"])
-    game.place_ships_computer(game.submarine_computer, ["B1", "B2"])
+    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
+    game.player.place_ships(game.player.submarine, ["B1", "B2"])
+    game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
+    game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
     #take_turn test
     expect(game.take_turn("A4", "A4")).to eq("")
     #helper test
