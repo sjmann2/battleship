@@ -10,35 +10,24 @@ class Board
   end
 
   def valid_placement?(ship_instance, coordinate_array)
-    if coordinates_are_on_board(coordinate_array)
-      if !(coordinate_array.map do |coordinate|
-        @cells[coordinate].empty?
-      end.include?(false))
-
-        #[T, T, T].include?(false) => false
-        #if cells coordinate includes false returns true
-
-        # if all coordinates are all valid, then the array will remain intact and be equal to original
-        #check coordinates against length of ship
-        if ship_instance.length == coordinate_array.length
-          #coordiantes are consecutive
-          #numbers are consecutive
-          if consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance)
-            true
-          elsif same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance)
-            true
-          else
-            false
-          end
-        else
-          false
-        end
-      else
-        false
-      end
-    else
-      false
+    if !coordinates_are_on_board(coordinate_array)
+      return false
     end
+    #coordinates are not on board, return false
+    if !coordinate_array.all? { |coordinate| @cells[coordinate].empty? }
+      return false
+    end
+    #if not all coordinates are empty, return false
+    if ship_instance.length != coordinate_array.length
+      return false
+    end
+    #check coordinates against length of ship
+    is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))
+    is_vertical = (same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance))
+    if !(is_horizontal || is_vertical)
+      return false
+    end
+    true
   end
 
   def coordinates_are_on_board(coordinate_array)
