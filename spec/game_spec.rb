@@ -7,7 +7,7 @@ require './lib/cell_generator'
 describe Game do
   it 'exists' do
     game = Game.new
-
+require 'pry'; binding.pry
     expect(game).to be_instance_of(Game)
   end
 

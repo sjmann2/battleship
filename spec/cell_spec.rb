@@ -71,6 +71,4 @@ describe Cell do
         expect(cell.render).to eq('X')
         expect(cell.render(true)).to eq('X')
     end
-    
-
 end
