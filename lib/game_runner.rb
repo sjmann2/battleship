@@ -9,9 +9,34 @@ require './lib/cell_generator'
 def run_game
     game = Game.new
     #Computer places ships
-    game.place_ships_computer(game.cruiser_computer, ['A1', 'A2', 'A3'])
-    game.place_ships_computer(game.submarine_computer, ['B1', 'B2'])
-    
+    # game.place_ships_computer(game.cruiser_computer, ['A1', 'A2', 'A3'])
+    # game.place_ships_computer(game.submarine_computer, ['B1', 'B2'])
+    #Random Ship placement
+    #generate random(but valid!) arrays based on ship length
+    #picks a random spot
+    computer_ship_placement_array = []
+    ship_instance = game.cruiser_computer
+    def random_computer_ship_placement(ship_instance, game, computer_ship_placement_array)
+      until game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array) == true
+        (ship_instance.length).times do
+            computer_ship_placement_array << game.board_computer.cells.keys.sample
+        end
+        if game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array)
+          computer_ship_placement_array
+        else
+          computer_ship_placement_array = []
+        end
+      end
+      computer_ship_placement_array
+    end
+    computer_ship_placement_array = random_computer_ship_placement(game.cruiser_computer, game, computer_ship_placement_array)
+    game.place_ships_computer(game.cruiser_computer, computer_ship_placement_array)
+    computer_ship_placement_array = []
+    computer_ship_placement_array = random_computer_ship_placement(game.submarine_computer, game, computer_ship_placement_array)
+    game.place_ships_computer(game.submarine_computer, computer_ship_placement_array)
+
+
+    require 'pry'; binding.pry
     #Player places ships
     p "I have laid out my ships on the grid."
     p "You now need to lay out your two ships."
