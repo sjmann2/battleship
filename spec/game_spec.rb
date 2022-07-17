@@ -7,32 +7,20 @@ require "./lib/cell_generator"
 describe Game do
   it "exists" do
     game = Game.new
-    require "pry"; binding.pry
+
     expect(game).to be_instance_of(Game)
   end
 
-  it "automatically generate new ships and board" do
+  it "automatically generates new ships and board" do
     game = Game.new
 
-    expect(game.cruiser_player).to be_instance_of(Ship)
     expect(game.cruiser_computer).to be_instance_of(Ship)
-    expect(game.submarine_player).to be_instance_of(Ship)
     expect(game.submarine_computer).to be_instance_of(Ship)
-    expect(game.board_player).to be_instance_of(Board)
     expect(game.board_computer).to be_instance_of(Board)
   end
 
   it "can place ships" do
     game = Game.new
-
-    #Initialization- both sides place ships
-    game.place_ships_player(game.cruiser_player, ["A1", "A2", "A3"])
-    game.place_ships_player(game.submarine_player, ["B1", "B2"])
-    expect(game.board_player.cells["A1"].ship).to eq(game.cruiser_player)
-    expect(game.board_player.cells["A2"].ship).to eq(game.cruiser_player)
-    expect(game.board_player.cells["A3"].ship).to eq(game.cruiser_player)
-    # expect(game.board.cells['B3'].empty?).to eq(true)
-    expect(game.place_ships_player(game.submarine_player, ["B3", "B2"])).to eq("Invalid coordinates try again")
 
     game.place_ships_computer(game.cruiser_computer, ["A1", "A2", "A3"])
     game.place_ships_computer(game.submarine_computer, ["B1", "B2"])

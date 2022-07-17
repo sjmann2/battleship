@@ -1,26 +1,12 @@
 class Game
-  attr_reader :cruiser_player,
-              :cruiser_computer,
-              :submarine_player,
+  attr_reader :cruiser_computer,
               :submarine_computer,
-              :board_player,
               :board_computer
 
   def initialize
-    @cruiser_player = Ship.new("cruiser", 3)
     @cruiser_computer = Ship.new("cruiser", 3)
-    @submarine_player = Ship.new("submarine", 2)
     @submarine_computer = Ship.new("submarine", 2)
-    @board_player = Board.new
     @board_computer = Board.new
-  end
-
-  def place_ships_player(ship_instance, coordinate_array)
-    if board_player.valid_placement?(ship_instance, coordinate_array)
-      board_player.place(ship_instance, coordinate_array)
-    else
-      "Invalid coordinates try again"
-    end
   end
 
   def place_ships_computer(ship_instance, coordinate_array)
