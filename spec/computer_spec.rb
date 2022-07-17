@@ -36,9 +36,9 @@ describe Computer do
     it 'can generate random valid ship placements' do
       computer = Computer.new
       50.times do
-      expect(valid_placement?(
+      expect(computer.board.valid_placement?(
               computer.cruiser,
-              random_computer_ship_placement(computer.cruiser))).to eq(true)
+              computer.random_computer_ship_placement(computer.cruiser))).to eq(true)
       end
     end
       
