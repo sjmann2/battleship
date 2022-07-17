@@ -8,10 +8,12 @@ describe CellGenerator do
     expect(cells).to be_instance_of(CellGenerator)
   end
 
+
   it "has a default length and a height" do
     cells = CellGenerator.new
 
     expect(cells.height).to eq(4)
+
     expect(cells.length).to eq(4)
   end
 
