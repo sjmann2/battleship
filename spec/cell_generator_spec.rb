@@ -1,11 +1,11 @@
 require "./lib/cell_generator"
 require "./lib/cell"
-require
+require "./lib/board"
 
 describe CellGenerator do
   it "exists" do
     cells = CellGenerator.new
-    expect(cells).to be_an_instance_of(CellGenerator)
+    expect(cells).to be_instance_of(CellGenerator)
   end
 
   it "has a default length and a width" do
@@ -18,8 +18,8 @@ describe CellGenerator do
   it "is a hash of cell coordinates" do
     cells = CellGenerator.new.cells
 
-    expect(cells).to be_an_instance_of(Hash)
-    expect(cells["A1"]).to be_an_instance_of(Cell)
+    expect(cells).to be_instance_of(Hash)
+    expect(cells["A1"]).to be_instance_of(Cell)
   end
 
   it "contains 16 key value pairs" do
