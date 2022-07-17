@@ -14,6 +14,9 @@ class Game
   def take_turn(player_shot, computer_shot)
     @computer.board.cells[player_shot].fire_upon
     @player.board.cells[computer_shot].fire_upon
+  end
+
+  def render(player_shot, computer_shot)
     puts """
     =============COMPUTER BOARD============="""
     puts @computer.board.render
@@ -115,6 +118,7 @@ class Game
       end
   
       take_turn(player_shot, computer_shot)
+      render(player_shot, computer_shot)
     end
   
     if (player.cruiser.sunk? && player.submarine.sunk?)

@@ -71,24 +71,15 @@ describe Game do
     expect(game.end_game?).to eq(true)
   end
 
-
-  xit "places ships on board for both sides" do
+  it "places ships on board" do
     game = Game.new
-    #game initialization automatically create cruiser and sub with empty arrays
-    game.player.place_ships(cruiser, ["A1", "A2", "A3"])
-    #make the ship class object cruiser
-    game.player.place_ships(submarine, ["B1", "B2"])
-
-    game.place_ships_computer(cruiser, ["A1", "A2", "A3"])
-    game.place_ships_computer(submarine, ["B1", "B2"])
-
-    #player board to show ships place and computer ships are present with true value
-    expect()
-
-    #Turn - both sides input their shots and get feedback on those shots
-    #Turn is repeated until End Game conditions are met
-    #End Game all ships are sunk by one side
-
-    expect()
+    
+    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
+    game.player.place_ships(game.player.submarine, ["B1", "B2"])
+    
+    expect(game.player.board.cells["A1"].empty?).to be(false)
+    expect(game.place_ships_computer).to be_instance_of(Array)
+    #I had trouble testing place ships computer--spent too long staring at it feel free
+    #different test
   end
 end
