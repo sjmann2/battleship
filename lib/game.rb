@@ -12,18 +12,14 @@ class Game
   end
 
   def take_turn(player_shot, computer_shot)
-    # if board_computer.valid_coordinate?(@player_shot) && !board_computer.cells[@player_shot].shot_at
-    #   board_computer.cells[@player_shot].fire_upon
-    # else
-    #   "Something went wrong!"
-    # end
     @computer.board.cells[player_shot].fire_upon
     @player.board.cells[computer_shot].fire_upon
-    puts "=============COMPUTER BOARD============="
+    puts """
+    =============COMPUTER BOARD============="""
     puts @computer.board.render
     puts "==============PLAYER BOARD=============="
     puts @player.board.render(true)
-    #feedback here!
+    
     puts shot_feedback_player_line(player_shot)
     puts shot_feedback_computer_line(computer_shot)
   end
