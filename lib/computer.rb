@@ -16,7 +16,7 @@ class Computer
       "Invalid coordinates try again"
     end
   end
- 
+
   def random_computer_ship_placement(ship_instance)
     computer_ship_placement_array = []
     until board.valid_placement?(ship_instance, computer_ship_placement_array) == true
@@ -32,9 +32,13 @@ class Computer
     computer_ship_placement_array
   end
 
-  # computer_ship_placement_array = random_computer_ship_placement(game.cruiser_computer, game, computer_ship_placement_array)
-  # game.place_ships_computer(game.cruiser_computer, computer_ship_placement_array)
-  # computer_ship_placement_array = []
-  # computer_ship_placement_array = random_computer_ship_placement(game.submarine_computer, game, computer_ship_placement_array)
-  # game.place_ships_computer(game.submarine_computer, computer_ship_placement_array)
+  def place_all_ships
+    @ships_to_place << @cruiser
+    @ships_to_place << @submarine
+    ships_placement = @ships_to_place.map do |ship|
+      [ship, random_computer_ship_placement(ship)]
+    end
+    place_ships(ships_placement[0][0], ships_placement[0][1])
+    place_ships(ships_placement[1][0], ships_placement[1][1])
+  end
 end
