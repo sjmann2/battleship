@@ -1,12 +1,14 @@
 class Computer
   attr_reader :board,
               :cruiser,
-              :submarine
+              :submarine,
+              :previous_shots
   def initialize
     @board = Board.new
     @cruiser = Ship.new("cruiser", 3)
     @submarine = Ship.new("submarine", 2)
     @ships_to_place = []
+    @previous_shots = []
   end
 
   def place_ships(ship_instance, coordinate_array)
@@ -42,11 +44,12 @@ class Computer
     place_ships(ships_placement[1][0], ships_placement[1][1])
   end
 
-  def computer_shot
-    random_computer_shot = nil
-    until !game.player.board.cells[computer_shot].shot_at == true
-      random_computer_shot = game.board_computer.cells.keys.sample
+  def take_random_shot
+    random_shot = board.cells.keys.sample
+    until @previous_shots.include?(random_shot) == false
+      random_shot = board.cells.keys.sample
     end
-    random_computer_shot
+    @previous_shots << random_shot
+    random_shot
   end
 end
