@@ -74,6 +74,7 @@ def run_game
   puts game.player.board.render(true)
 
   until game.end_game? == true
+    #random computer shot
     computer_shot = game.board_computer.cells.keys.sample
     until !game.player.board.cells[computer_shot].shot_at == true
       computer_shot = game.board_computer.cells.keys.sample

@@ -57,4 +57,14 @@ describe Computer do
             )).to eq(true)
     end
   end
+
+  it 'can take a random shot' do
+    50.times do
+      game = Game.new
+
+      expect(computer.board.valid coordinate?(computer_shot)).to eq(true)
+    end
+  end
+
+
 end

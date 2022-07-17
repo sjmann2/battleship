@@ -6,6 +6,7 @@ class Game
 
   def initialize
     @player = Player.new
+    @computer = Computer.new
     @cruiser_computer = Ship.new("cruiser", 3)
     @submarine_computer = Ship.new("submarine", 2)
     @board_computer = Board.new
@@ -25,7 +26,7 @@ class Game
     # else
     #   "Something went wrong!"
     # end
-    board_computer.cells[player_shot].fire_upon
+    @computer.board.cells[player_shot].fire_upon
     @player.board.cells[computer_shot].fire_upon
     puts "=============COMPUTER BOARD============="
     puts board_computer.render
@@ -37,7 +38,7 @@ class Game
   end
 
   def shot_feedback_player_line(player_shot)
-    if board_computer.cells[player_shot].render == "M"
+    if @computer.board.cells[player_shot].render == "M"
       "Your shot on #{player_shot} was a miss"
     elsif board_computer.cells[player_shot].render == "H"
       "Your shot on #{player_shot} was a hit"
@@ -61,7 +62,7 @@ class Game
   end
 
   def end_game?
-    if (@player.cruiser.sunk? && @player.submarine.sunk?) || (@submarine_computer.sunk? && @cruiser_computer.sunk?)
+    if (@player.cruiser.sunk? && @player.submarine.sunk?) || (@computer.cruiser.sunk? && @computer.submarine.sunk?)
       true
     else
       false

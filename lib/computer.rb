@@ -41,4 +41,12 @@ class Computer
     place_ships(ships_placement[0][0], ships_placement[0][1])
     place_ships(ships_placement[1][0], ships_placement[1][1])
   end
+
+  def computer_shot
+    random_computer_shot = nil
+    until !game.player.board.cells[computer_shot].shot_at == true
+      random_computer_shot = game.board_computer.cells.keys.sample
+    end
+    random_computer_shot
+  end
 end
