@@ -1,9 +1,11 @@
 class Game
   attr_reader :cruiser_computer,
               :submarine_computer,
-              :board_computer
+              :board_computer,
+              :player
 
   def initialize
+    @player = Player.new
     @cruiser_computer = Ship.new("cruiser", 3)
     @submarine_computer = Ship.new("submarine", 2)
     @board_computer = Board.new
@@ -18,18 +20,17 @@ class Game
   end
 
   def take_turn(player_shot, computer_shot)
-
-    # if board_computer.valid_coordinate?(player_shot) && !board_computer.cells[player_shot].shot_at
-    #   board_computer.cells[player_shot].fire_upon
+    # if board_computer.valid_coordinate?(@player_shot) && !board_computer.cells[@player_shot].shot_at
+    #   board_computer.cells[@player_shot].fire_upon
     # else
     #   "Something went wrong!"
     # end
     board_computer.cells[player_shot].fire_upon
-    board_player.cells[computer_shot].fire_upon
+    @player.board.cells[computer_shot].fire_upon
     puts "=============COMPUTER BOARD============="
     puts board_computer.render
     puts "==============PLAYER BOARD=============="
-    puts board_player.render(true)
+    puts @player.board.render(true)
     #feedback here!
     puts shot_feedback_player_line(player_shot)
     puts shot_feedback_computer_line(computer_shot)
@@ -48,19 +49,19 @@ class Game
   end
 
   def shot_feedback_computer_line(computer_shot)
-    if board_player.cells[computer_shot].render == "M"
+    if @player.board.cells[computer_shot].render == "M"
       "My shot on #{computer_shot} was a miss"
-    elsif board_player.cells[computer_shot].render == "H"
+    elsif @player.board.cells[computer_shot].render == "H"
       "My shot on #{computer_shot} was a hit"
-    elsif board_player.cells[computer_shot].render == "X"
-      "My shot on #{computer_shot} sunk your #{board_player.cells[computer_shot].ship.name}"
+    elsif @player.board.cells[computer_shot].render == "X"
+      "My shot on #{computer_shot} sunk your #{player.board.cells[computer_shot].ship.name}"
     else
       "Something went wrong!"
     end
   end
 
   def end_game?
-    if (@cruiser_player.sunk? && @submarine_player.sunk?) || (@submarine_computer.sunk? && @cruiser_computer.sunk?)
+    if (@player.cruiser.sunk? && @player.submarine.sunk?) || (@submarine_computer.sunk? && @cruiser_computer.sunk?)
       true
     else
       false
