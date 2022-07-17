@@ -13,9 +13,9 @@ class Computer
     @previous_shots = []
   end
 
-  def place_ships(ship_instance, coordinate_array, players_board)
-    if players_board.valid_placement?(ship_instance, coordinate_array)
-      players_board.place(ship_instance, coordinate_array)
+  def place_ships(ship_instance, coordinate_array)
+    if board.valid_placement?(ship_instance, coordinate_array)
+      board.place(ship_instance, coordinate_array)
     else
       "Invalid coordinates try again"
     end
@@ -36,14 +36,12 @@ class Computer
     computer_ship_placement_array
   end
 
-  def place_all_ships(players_board)
+  def place_all_ships
     @ships_to_place << @cruiser
     @ships_to_place << @submarine
     ships_placement = @ships_to_place.map do |ship|
-      [ship, random_computer_ship_placement(ship)]
+      [ship, place_ships(ship, random_computer_ship_placement(ship))]
     end
-    place_ships(ships_placement[0][0], ships_placement[0][1], players_board)
-    place_ships(ships_placement[1][0], ships_placement[1][1], players_board)
   end
 
   def take_random_shot

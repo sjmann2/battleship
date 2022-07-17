@@ -23,22 +23,24 @@ describe Computer do
   it "can place ships" do
     game = Game.new
 
-    computer.place_ships(computer.cruiser, ["A1", "A2", "A3"], player.board)
-    computer.place_ships(computer.submarine, ["B1", "B2"], player.board)
+    game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
+    game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
 
-    expect(computer.board.cells["A1"].ship).to eq(computer.cruiser)
-    expect(computer.board.cells["A2"].ship).to eq(computer.cruiser)
-    expect(computer.board.cells["A3"].ship).to eq(computer.cruiser)
-    expect(computer.board.cells['B3'].empty?).to eq(true)
-    expect(computer.place_ships(computer.submarine, ["B3", "B2"])).to eq("Invalid coordinates try again")
+    expect(game.computer.board.cells["A1"].ship).to eq(game.computer.cruiser)
+    expect(game.computer.board.cells["A2"].ship).to eq(game.computer.cruiser)
+    expect(game.computer.board.cells["A3"].ship).to eq(game.computer.cruiser)
+    expect(game.computer.board.cells['B3'].empty?).to eq(true)
+    expect(game.computer.place_ships(game.computer.submarine, ["B3", "B2"]))
+      .to eq("Invalid coordinates try again")
   end
 
   it 'can generate random valid ship placements' do
     computer = Computer.new
     50.times do
-    expect(computer.board.valid_placement?(
+      expect(computer.board.valid_placement?(
             computer.cruiser,
-            computer.random_computer_ship_placement(computer.cruiser))).to eq(true)
+            computer.random_computer_ship_placement(computer.cruiser)
+            )).to eq(true)
     end
   end
 
@@ -60,7 +62,7 @@ describe Computer do
     game = Game.new
 
     game.place_ships_computer
-    expect(game.player.board.cells.count { |cell_name, cell| cell.ship != nil }).to eq(5)
+    expect(game.computer.board.cells.count { |cell_name, cell| cell.ship != nil }).to eq(5)
   end
 
   it 'can take a random shot' do

@@ -8,7 +8,7 @@ class Game
   end
 
   def place_ships_computer
-    @computer.place_all_ships(@player.board)
+    @computer.place_all_ships
   end
 
   def take_turn(player_shot, computer_shot)

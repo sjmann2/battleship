@@ -9,7 +9,7 @@ require "./lib/computer"
 def run_game
   game = Game.new
   #computer places ships randomly
-  game.place_all_ships
+  game.place_ships_computer
 
   #Player places ships
 
@@ -47,17 +47,17 @@ def run_game
 
   game.player.place_ships(game.player.submarine, player_submarine_placement)
   puts game.player.board.render(true)
-require 'pry'; binding.pry
+
   until game.end_game? == true
     #random computer shot
-    game.computer.take_random_shot
-
+    computer_shot = game.computer.take_random_shot
+require 'pry'; binding.pry
     p "Enter the coordinate for your shot:"
 
     player_shot = gets.chomp.upcase
 
-    until game.board_computer.valid_coordinate?(player_shot) && !game.board_computer.cells[player_shot].shot_at
-      game.board_computer.cells[player_shot].fire_upon == true
+    until game.computer.board.valid_coordinate?(player_shot) && !game.computer.board.cells[player_shot].shot_at
+      game.computer.board.cells[player_shot].fire_upon == true
 
       p "Invalid coordinates, please try again."
 
@@ -65,7 +65,6 @@ require 'pry'; binding.pry
     end
 
     game.take_turn(player_shot, computer_shot)
-    p " "
   end
 
   if (game.player.cruiser.sunk? && game.player.submarine.sunk?)
