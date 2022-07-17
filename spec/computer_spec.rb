@@ -15,7 +15,6 @@ describe Computer do
 
     it "has ships and a board" do
       computer = Computer.new
-
       expect(computer.board).to be_instance_of(Board)
       expect(computer.cruiser).to be_instance_of(Ship)
       expect(computer.submarine).to be_instance_of(Ship)

@@ -1,5 +1,7 @@
 class Computer
-  attr_reader
+  attr_reader :board,
+              :cruiser,
+              :submarine
   def initialize
     @board = Board.new
     @cruiser = Ship.new("cruiser", 3)
@@ -14,16 +16,14 @@ class Computer
       "Invalid coordinates try again"
     end
   end
-
-  computer_ship_placement_array = []
-
-  ship_instance = game.cruiser_computer
-  def random_computer_ship_placement(ship_instance, game, computer_ship_placement_array)
-    until game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array) == true
+ 
+  def random_computer_ship_placement(ship_instance)
+    computer_ship_placement_array = []
+    until board.valid_placement?(ship_instance, computer_ship_placement_array) == true
       (ship_instance.length).times do
-        computer_ship_placement_array << game.board_computer.cells.keys.sample
+        computer_ship_placement_array << board.cells.keys.sample
       end
-      if game.board_computer.valid_placement?(ship_instance, computer_ship_placement_array)
+      if board.valid_placement?(ship_instance, computer_ship_placement_array)
         computer_ship_placement_array
       else
         computer_ship_placement_array = []
