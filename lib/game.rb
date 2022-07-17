@@ -1,23 +1,14 @@
 class Game
-  attr_reader :cruiser_computer,
-              :submarine_computer,
-              :board_computer,
+  attr_reader :computer,
               :player
 
   def initialize
     @player = Player.new
     @computer = Computer.new
-    @cruiser_computer = Ship.new("cruiser", 3)
-    @submarine_computer = Ship.new("submarine", 2)
-    @board_computer = Board.new
   end
 
-  def place_ships_computer(ship_instance, coordinate_array)
-    if board_computer.valid_placement?(ship_instance, coordinate_array)
-      board_computer.place(ship_instance, coordinate_array)
-    else
-      "Invalid coordinates try again"
-    end
+  def place_ships_computer
+    @computer.place_all_ships
   end
 
   def take_turn(player_shot, computer_shot)
@@ -29,7 +20,7 @@ class Game
     @computer.board.cells[player_shot].fire_upon
     @player.board.cells[computer_shot].fire_upon
     puts "=============COMPUTER BOARD============="
-    puts board_computer.render
+    puts @computer.board.render
     puts "==============PLAYER BOARD=============="
     puts @player.board.render(true)
     #feedback here!
@@ -40,10 +31,10 @@ class Game
   def shot_feedback_player_line(player_shot)
     if @computer.board.cells[player_shot].render == "M"
       "Your shot on #{player_shot} was a miss"
-    elsif board_computer.cells[player_shot].render == "H"
+    elsif @computer.board.cells[player_shot].render == "H"
       "Your shot on #{player_shot} was a hit"
-    elsif board_computer.cells[player_shot].render == "X"
-      "Your shot on #{player_shot} sunk my #{board_computer.cells[player_shot].ship.name}"
+    elsif @computer.board.cells[player_shot].render == "X"
+      "Your shot on #{player_shot} sunk my #{@computer.board.cells[player_shot].ship.name}"
     else
       "Something went wrong!"
     end

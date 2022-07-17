@@ -59,10 +59,10 @@ describe Computer do
   end
 
   it 'can take a random shot' do
-    50.times do
+    16.times do
       game = Game.new
 
-      expect(computer.board.valid coordinate?(computer_shot)).to eq(true)
+      expect(game.computer.board.valid coordinate?(computer_shot)).to eq(true)
     end
   end
 
