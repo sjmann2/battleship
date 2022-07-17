@@ -21,10 +21,10 @@ describe Computer do
   end
 
   it "can place ships" do
-    computer = Computer.new
+    game = Game.new
 
-    computer.place_ships(computer.cruiser, ["A1", "A2", "A3"])
-    computer.place_ships(computer.submarine, ["B1", "B2"])
+    computer.place_ships(computer.cruiser, ["A1", "A2", "A3"], player.board)
+    computer.place_ships(computer.submarine, ["B1", "B2"], player.board)
 
     expect(computer.board.cells["A1"].ship).to eq(computer.cruiser)
     expect(computer.board.cells["A2"].ship).to eq(computer.cruiser)
@@ -43,19 +43,24 @@ describe Computer do
   end
 
   it 'can place multiple ships at a time' do
-    50.times do
-      computer = Computer.new
-      computer.place_all_ships
+    # 50.times do
+    #   computer = Computer.new
+    #   computer.place_all_ships
 
-      expect(computer.board.valid_placement?(
-              computer.cruiser,
-              computer.random_computer_ship_placement(computer.cruiser)
-            )).to eq(true)
-      expect(computer.board.valid_placement?(
-              computer.submarine,
-              computer.random_computer_ship_placement(computer.submarine)
-            )).to eq(true)
-    end
+    #   expect(computer.board.valid_placement?(
+    #           computer.cruiser,
+    #           computer.random_computer_ship_placement(computer.cruiser)
+    #         )).to eq(true)
+    #   expect(computer.board.valid_placement?(
+    #           computer.submarine,
+    #           computer.random_computer_ship_placement(computer.submarine)
+    #         )).to eq(true)
+    # end
+    #test for if cruiser and sub are placed, use tally
+    game = Game.new
+
+    game.place_ships_computer
+    expect(game.player.board.cells.count { |cell_name, cell| cell.ship != nil }).to eq(5)
   end
 
   it 'can take a random shot' do
