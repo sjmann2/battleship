@@ -21,13 +21,5 @@ class CellGenerator
       .flatten!
       .map { |coordinate| [coordinate, Cell.new(coordinate)] }
       .to_h
-
-    # coordinates =
-    #     numbers.map do |number|
-    #         letters.map do |letter|
-    #             letter + number.to_s
-    #         end
-    #     end
-    #     coordinates.flatten!
   end
 end

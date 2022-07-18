@@ -27,16 +27,13 @@ describe CellGenerator do
   it "contains 16 key value pairs by default" do
     cells = CellGenerator.new.cells
 
-    expect(cells.width).to eq(16)
-    #This should be testing area or key value pairs, not just checking width
-    #width = 4, not 16
+    expect(cells.length).to eq(16)
   end
 
   it "can increase board size" do
     cells = CellGenerator.new(6, 6).cells
 
-    expect(cells.width).to eq(36)
-    #same here, width is 6, not 36
+    expect(cells.length).to eq(36)
     expect(cells["F6"]).to be_instance_of(Cell)
   end
 end
