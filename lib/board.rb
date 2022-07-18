@@ -2,6 +2,7 @@ class Board
   attr_reader :cells
 
   def initialize
+    @cell_generator = CellGenerator.new
     @cells = CellGenerator.new.cells
   end
 
@@ -21,12 +22,13 @@ class Board
     if ship_instance.length != coordinate_array.length
       return false
     end
-    #check coordinates against length of ship
+    #if coordinates length is not same as length of ship, return false
     is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))
     is_vertical = (same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance))
     if !(is_horizontal || is_vertical)
       return false
     end
+    #if coordinates are not horizontal or vertical, return false
     true
   end
 
@@ -114,22 +116,28 @@ class Board
   end
 
   def render(see_ships = false)
-    length = (1..@cells.length).to_a
+    require 'pry' ; binding.pry
+    width = (1..@cell_generator.width).to_a
     #[1, 2, 3, 4]
-    height = ("A"..(("A".ord + @cells.height - 1).chr)).to_a
+    height = ("A"..(("A".ord + @cell_generator.height - 1).chr)).to_a
     #["A", "B", "C", "D"]
+    
 
-    "#{length.join(", ")} /n"
+    "#{width.join(", ")} /n"
     #["1, 2, 3, 4"]
     coordinates =
-    length.map { |num| height.map { |letter| letter + num.to_s }}
+    width.map { |num| height.map { |letter| letter + num.to_s }}
     .flatten!.sort!
     #["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
 
-    coordinates.map { |coordinate| @cells[coordinate].render(see_ships)}
+    render_array = coordinates.map { |coordinate| @cells[coordinate].render(see_ships)}
+    #[".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."]
+      strings = (render_array.each_slice(@cell_generator.width).to_a).map {|array| array.join(", ")}
+      #["., ., ., .", "., ., ., .", "., ., ., .", "., ., ., ."]
+      strings.map {|string| string.delete(",")}.join("\n")
+      #". . . .\n. . . .\n. . . .\n. . . ."
+      
+    end
+    #some method to break up array into string one line for length of width
   end
-
-    # "#{height[0]} #{@cells[""].render(see_ships)} #{@cells[]}"
-    # "A"
-
-  end
+end

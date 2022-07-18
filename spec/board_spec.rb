@@ -11,7 +11,7 @@ describe Board do
 
   it "has cells" do
     board = Board.new
-require 'pry' ; binding.pry
+
     expect(board.cells).to be_instance_of(Hash)
     expect(board.cells["B1"]).to be_instance_of(Cell)
   end
