@@ -12,6 +12,7 @@ class Computer
     @submarine = Ship.new("submarine", 2)
     @ships_to_place = []
     @previous_shots = []
+    @target_array = []
     @player_board = nil
   end
 
@@ -67,7 +68,7 @@ class Computer
 
 
     # Makes an array of the 1-4 coordinates that are eligible and around the hit location
-  def array_four_nearby_possibles(coordinate)
+  def array_of_nearby_possibles(coordinate)
     nearby_array = []
     #right
     nearby_array << coordinate.next
@@ -78,14 +79,40 @@ class Computer
     #left
     nearby_array << coordinate[0] + (coordinate[1].to_i - 1).to_s
     #remove positions not on board or already shot at
-    possible_nearby_array = nearby_array.select do |coordinate| 
+    nearby_array = nearby_array.select do |coordinate| 
       board.valid_coordinate?(coordinate) && !player_board.cells[coordinate].shot_at
     end
-    possible_nearby_array
+    nearby_array
   end
 
     # Takes a random shot of that array shuffle, then pop
+
+  def computer_shot_on_hit
+    array_of_nearby_possibles("A3").shuffle.pop
+  end
+
+  def computer_shot_on_first_hit
+    last_shot_hit = @previous_shots.last.coordinate
+    @target_array = array_of_nearby_possibles(last_shot_hit)
+    @target_array.shuffle.pop
+  end
+
+  def computer_shooting
+    #takes random shot at beginning of game
+    return take_random_shot if cells.count { |cell| cell.shot_at == true }.zero?
+    #first hit, it generates the target array and begins firing at it
+    elsif  (cells.count { |cell| cell.render == "H" } == 1) && target_array == [] && player_board.cells[@previous_shots.last.ship] != nil
+    computer_shot_on_first_hit
+    #keeps firing from target array
+    elsif !last_shot_hit && (target_array != [])
+      @target_array.shuffle.pop
+    elsif (cells.count { |cell| cell.render == "H" } == 2)
+  end 
+
+      # (cells.count { |cell| cell.render == "H" } == 1) && 
+
     # Keeps on shooting from array until second hit
+  
     # Follow-up hit
       # Evaluate if ship is horizontal or vertical
       # Generate new array of two possible next shots
