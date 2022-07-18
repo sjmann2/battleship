@@ -116,28 +116,25 @@ class Board
   end
 
   def render(see_ships = false)
-    require 'pry' ; binding.pry
+    # "#{width.join(", ")} /n" +
+    #["1, 2, 3, 4"]
     width = (1..@cell_generator.width).to_a
     #[1, 2, 3, 4]
     height = ("A"..(("A".ord + @cell_generator.height - 1).chr)).to_a
     #["A", "B", "C", "D"]
-    
 
-    "#{width.join(", ")} /n"
-    #["1, 2, 3, 4"]
     coordinates =
     width.map { |num| height.map { |letter| letter + num.to_s }}
     .flatten!.sort!
     #["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
-
     render_array = coordinates.map { |coordinate| @cells[coordinate].render(see_ships)}
     #[".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."]
       strings = (render_array.each_slice(@cell_generator.width).to_a).map {|array| array.join(", ")}
       #["., ., ., .", "., ., ., .", "., ., ., .", "., ., ., ."]
-      strings.map {|string| string.delete(",")}.join("\n")
+      new_lines = strings.map {|string| string.delete(",")}.join("\n")
       #". . . .\n. . . .\n. . . .\n. . . ."
-      
+      return "#{ width.join(", ").delete(",")} /n" + new_lines
+      # new_lines.insert(0, "#{height.map {|letter| return letter}}")
+      require 'pry' ; binding.pry
     end
-    #some method to break up array into string one line for length of width
   end
-end
