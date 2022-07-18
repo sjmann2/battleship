@@ -5,6 +5,7 @@ class Game
   def initialize
     @player = Player.new
     @computer = Computer.new
+    @computer.player_board = @player.board
   end
 
   def place_ships_computer

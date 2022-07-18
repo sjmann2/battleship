@@ -4,6 +4,7 @@ class Computer
               :submarine,
               :previous_shots,
               :ships_to_place
+  attr_accessor :player_board
 
   def initialize
     @board = Board.new
@@ -11,6 +12,7 @@ class Computer
     @submarine = Ship.new("submarine", 2)
     @ships_to_place = []
     @previous_shots = []
+    @player_board = nil
   end
 
   def place_ships(ship_instance, coordinate_array)
@@ -52,4 +54,50 @@ class Computer
     @previous_shots << random_shot
     random_shot
   end
+  
+  
+  # Random shot from a more intelligent shooting pattern
+  # checkerboard shooting
+
+  # Hit! When the last random shot was a hit
+  def last_shot_hit?
+    return false if @previous_shots == []
+    !@player_board.cells[@previous_shots.last.coordinate].empty?
+  end
+
+
+    # Makes an array of the 1-4 coordinates that are eligible and around the hit location
+  def array_four_nearby_possibles(coordinate)
+    nearby_array = []
+    #right
+    nearby_array << coordinate.next
+    #up
+    nearby_array << (coordinate[0].ord - 1).chr.to_s + coordinate[1]
+    #down
+    nearby_array << (coordinate[0].ord + 1).chr.to_s + coordinate[1]
+    #left
+    nearby_array << coordinate[0] + (coordinate[1].to_i - 1).to_s
+    #remove positions not on board or already shot at
+    possible_nearby_array = nearby_array.select do |coordinate| 
+      board.valid_coordinate?(coordinate) && !player_board.cells[coordinate].shot_at
+    end
+    possible_nearby_array
+  end
+
+    # Takes a random shot of that array shuffle, then pop
+    # Keeps on shooting from array until second hit
+    # Follow-up hit
+      # Evaluate if ship is horizontal or vertical
+      # Generate new array of two possible next shots
+        # Iterate (adding 1 to changing letter or number) until it gets
+          # to a cell that hasn't been fired upon or has a miss (miss needs to end adding any elements)
+      # Weeds out invalid coordinates
+      # Fires random from that array
+      # Repeat process of follow-up hit until ship.sunk? is true
+    #Second ship scenario
+      # If it exhausts that situation, pop out of loop also with a re-evaluation of the shots
+      #IMPORTANT create variable that saves first hit location for this to work
+      # Reruns follow-up hit but switches evaluation of ship horizontal/vertical
+        #Horiz/vert probably also needs to be saved variable then
+    #Random shot method needs to ask if there are outstanding hits on the board 
 end

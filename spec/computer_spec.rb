@@ -45,20 +45,6 @@ describe Computer do
   end
 
   it 'can place multiple ships at a time' do
-    # 50.times do
-    #   computer = Computer.new
-    #   computer.place_all_ships
-
-    #   expect(computer.board.valid_placement?(
-    #           computer.cruiser,
-    #           computer.random_computer_ship_placement(computer.cruiser)
-    #         )).to eq(true)
-    #   expect(computer.board.valid_placement?(
-    #           computer.submarine,
-    #           computer.random_computer_ship_placement(computer.submarine)
-    #         )).to eq(true)
-    # end
-    #test for if cruiser and sub are placed, use tally
     game = Game.new
 
     game.place_ships_computer
@@ -71,5 +57,47 @@ describe Computer do
       computer_shot = game.computer.take_random_shot
       expect(game.player.board.valid_coordinate?(computer_shot)).to eq(true)
     end
+  end
+
+  it 'can tell if last shot was a hit' do
+    game = Game.new
+
+    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
+    game.player.place_ships(game.player.submarine, ["B1", "B2"])
+
+    game.take_turn("A1", "A4")
+    game.computer.previous_shots << game.computer.board.cells["A4"]
+    expect(game.computer.last_shot_hit?).to be false
+
+    game.take_turn("A2", "A1")
+    game.computer.previous_shots << game.computer.board.cells["A1"]
+
+    expect(game.computer.last_shot_hit?).to be true
+
+    game.take_turn("A3", "B3")
+    game.computer.previous_shots << game.computer.board.cells["B3"]
+    expect(game.computer.last_shot_hit?).to be false
+
+    game.take_turn("A4", "B2")
+    game.computer.previous_shots << game.computer.board.cells["B2"]
+    expect(game.computer.last_shot_hit?).to be true
+  end
+
+  it 'can make array of possible coordinate to shoot at after hit' do
+
+    game = Game.new
+
+    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
+    game.player.place_ships(game.player.submarine, ["B1", "B2"])
+
+    game.take_turn("A1", "A4")
+    game.computer.previous_shots << game.computer.board.cells["A4"]
+
+    expect(game.computer.last_shot_hit?).to be false
+
+    game.take_turn("A2", "A3")
+    game.computer.previous_shots << game.computer.board.cells["A3"]
+
+    expect(game.computer.array_four_nearby_possibles("A3")).to eq(["B3", "A2"])
   end
 end
