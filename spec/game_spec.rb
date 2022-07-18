@@ -28,7 +28,6 @@ describe Game do
     game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
     game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
 
-    #(player's inputted shot, computer shot)
     expect(game.computer.board.cells["A4"].render).to eq(".")
     expect(game.player.board.cells["A4"].render).to eq(".")
 
@@ -49,14 +48,8 @@ describe Game do
 
     game.take_turn("C2", "C2")
 
-    #CLI output and feedback isn't tested, render(true)
-
-    #Render both boards
-    #player shot => go into computer board, call the corresponding cell, run fire_upon method
-    #computer shot => go into player board, call the corresponding cell, run fire_upon method
-    #Reporting results of the shot (feedback!)
-    #Runs inside a loop until both ships of either player or computer are ship.sunk? = true
-
+    expect(game.computer.board.cells["C2"].render).to eq("M")
+    expect(game.player.board.cells["C2"].render).to eq("M")
   end
 
   it "knows when to end game" do
@@ -78,36 +71,15 @@ describe Game do
     expect(game.end_game?).to eq(true)
   end
 
-  xit "gives feedback on shots" do
+  it "places ships on board" do
     game = Game.new
-
+    
     game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
     game.player.place_ships(game.player.submarine, ["B1", "B2"])
-    game.computer.place_ships(game.computer.cruiser, ["A1", "A2", "A3"])
-    game.computer.place_ships(game.computer.submarine, ["B1", "B2"])
-    #take_turn test
-    expect(game.take_turn("A4", "A4")).to eq("")
-    #helper test
-    game.shot_feedback("A4", "A4")
-  end
-
-  xit "places ships on board for both sides" do
-    game = Game.new
-    #game initialization automatically create cruiser and sub with empty arrays
-    game.player.place_ships(cruiser, ["A1", "A2", "A3"])
-    #make the ship class object cruiser
-    game.player.place_ships(submarine, ["B1", "B2"])
-
-    game.place_ships_computer(cruiser, ["A1", "A2", "A3"])
-    game.place_ships_computer(submarine, ["B1", "B2"])
-
-    #player board to show ships place and computer ships are present with true value
-    expect()
-
-    #Turn - both sides input their shots and get feedback on those shots
-    #Turn is repeated until End Game conditions are met
-    #End Game all ships are sunk by one side
-
-    expect()
+    
+    expect(game.player.board.cells["A1"].empty?).to be(false)
+    expect(game.place_ships_computer).to be_instance_of(Array)
+    #I had trouble testing place ships computer--spent too long staring at it feel free
+    #different test
   end
 end
