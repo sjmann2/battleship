@@ -22,7 +22,9 @@ class Game
     puts @computer.board.render
     puts "==============PLAYER BOARD=============="
     puts @player.board.render(true)
+  end
 
+  def shot_feedback(player_shot, computer_shot)
     puts shot_feedback_player_line(player_shot)
     puts shot_feedback_computer_line(computer_shot)
   end
@@ -77,59 +79,55 @@ class Game
            "You now need to lay out your two ships. \n" +
            "The Cruiser is three units long and the Submarine is two units long."
 
-    puts player.board.render
-
-    p "Enter the squares for the Cruiser (3 spaces):"
-
-    player_cruiser_placement = gets.chomp.delete(",").upcase.split(" ")
-
-    until player.board.valid_placement?(player.cruiser, player_cruiser_placement) == true
-      p "Invalid coordinates, please try again."
-
-      player_cruiser_placement = gets.chomp.delete(",").upcase.split(" ")
-    end
-
-    player.place_ships(player.cruiser, player_cruiser_placement)
-
-    puts player.board.render(true)
-
-    p "Enter the squares for the Submarine (2 spaces):"
-
-    player_submarine_placement = gets.chomp.delete(",").upcase.split(" ")
-
-    until player.board.valid_placement?(player.submarine, player_submarine_placement) == true
-      p "Invalid coordinates, please try again."
-
-      player_submarine_placement = gets.chomp.delete(",").upcase.split(" ")
-    end
-
-    player.place_ships(player.submarine, player_submarine_placement)
-    puts player.board.render(true)
+    puts @player.board.render
+    place_one_ship(@player.cruiser)
+    place_one_ship(@player.submarine)
   end
 
-  #The cruiser and submarine interaction are exactly the same except for cruiser/submarine
-  #I'm thinking we can condense this into one somehow with a loop that runs twice
+  def place_one_ship(ship_instance)
+    puts "Enter the squares for the #{ship_instance.name} (#{ship_instance.length} spaces):"
+    puts "Please enter coordinates in the proper format, with either a space or comma between each coordinate."
+    player_ship_placement = gets.chomp
+            .gsub(",", " ")
+            .upcase
+            .split(" ")
+            .sort
+    until @player.board.valid_placement?(ship_instance, player_ship_placement) == true
+      p "Invalid coordinates, please try again."
+
+      player_cruiser_placement = gets.chomp
+                                    .gsub(",", " ")
+                                    .upcase
+                                    .split(" ")
+                                    .sort
+    end
+    @player.place_ships(ship_instance, player_ship_placement)
+    puts @player.board.render(true)
+  end
+
   def turns
     until end_game? == true
-      computer_shot = computer.take_random_shot
+      computer_shot = @computer.take_random_shot
 
-      p "Enter the coordinate for your shot:"
+      p 'Enter the coordinate for your shot:'
 
       player_shot = gets.chomp.upcase
 
-      until computer.board.valid_coordinate?(player_shot) && !computer.board.cells[player_shot].shot_at
-        p "Invalid coordinates, please try again."
-
+      until @computer.board.valid_coordinate?(player_shot) && !@computer.board.cells[player_shot].shot_at
+        p 'Invalid coordinates, please try again.'
         player_shot = gets.chomp.upcase
       end
 
       take_turn(player_shot, computer_shot)
-      render(player_shot, computer_shot)
+      render
+      shot_feedback(player_shot, computer_shot)
     end
   end
 
   def end_game
-    if (player.cruiser.sunk? && player.submarine.sunk?)
+    # This conditional will lead to the computer winning in a
+    # tie situation (both side sink each others last ship on the final turn)
+    if (@player.cruiser.sunk? && @player.submarine.sunk?)
       p "I won, hahahahaha"
     else
       p "You won, nice job beating a computer..."
