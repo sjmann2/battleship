@@ -114,9 +114,9 @@ class Board
   end
 
   def render(see_ships = false)
-    length = (1..cells.length).to_a
+    length = (1..@cells.length).to_a
     #[1, 2, 3, 4]
-    height = ("A"..(("A".ord + cells.height - 1).chr)).to_a
+    height = ("A"..(("A".ord + @cells.height - 1).chr)).to_a
     #["A", "B", "C", "D"]
 
     "#{length.join(", ")} /n"
@@ -127,12 +127,9 @@ class Board
     #["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
 
     coordinates.map { |coordinate| @cells[coordinate].render(see_ships)}
-    end
+  end
 
-
-
-    "#{height[0]} #{@cells[""].render(see_ships)} #{@cells[]"
+    # "#{height[0]} #{@cells[""].render(see_ships)} #{@cells[]}"
     # "A"
 
   end
-end
