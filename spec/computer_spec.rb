@@ -159,7 +159,7 @@ describe Computer do
     game.take_turn("A2", "B1")
     game.computer.previous_shots << "B1"
     game.computer.first_hit = "B1"
-    
+
     game.take_turn("A3", game.computer.computer_shooting)
     require 'pry'; binding.pry
     
@@ -177,9 +177,75 @@ describe Computer do
 
     game.take_turn("B4", game.computer.computer_shooting)
     require 'pry'; binding.pry
+
+    game.take_turn("B4", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+
+    game.take_turn("B4", game.computer.computer_shooting)
+    require 'pry'; binding.pry
   end 
 
-  xit 'can handle longer ships' do
+  # it 'can handle longer ships' do
+  #   game = Game.new
 
-  end
+  #   game.player.place_ships(game.player.cruiser, ["B1", "B2", "B3"])
+  #   game.player.place_ships(game.player.battleship, ["C1", "C2"])
+
+  #   game.take_turn("A1", "A4")
+  #   game.computer.previous_shots << "A4"
+
+  #   game.take_turn("A2", "B1")
+  #   game.computer.previous_shots << "B1"
+  #   game.computer.first_hit = "B1"
+
+  #   game.take_turn("A3", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+    
+  #   game.take_turn("A4", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B1", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B2", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B3", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B4", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+  # end
+
+  # it 'can handle a third ship' do
+  #   game = Game.new
+
+  #   game.player.place_ships(game.player.cruiser, ["B1", "B2", "B3"])
+  #   game.player.place_ships(game.player.submarine, ["C1", "C2"])
+
+  #   game.take_turn("A1", "A4")
+  #   game.computer.previous_shots << "A4"
+
+  #   game.take_turn("A2", "B1")
+  #   game.computer.previous_shots << "B1"
+  #   game.computer.first_hit = "B1"
+
+  #   game.take_turn("A3", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+    
+  #   game.take_turn("A4", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B1", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B2", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B3", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+
+  #   game.take_turn("B4", game.computer.computer_shooting)
+  #   require 'pry'; binding.pry
+  # end
 end
