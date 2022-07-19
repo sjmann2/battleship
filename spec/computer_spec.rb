@@ -158,7 +158,8 @@ describe Computer do
 
     game.take_turn("A2", "B1")
     game.computer.previous_shots << "B1"
-
+    game.computer.first_hit = "B1"
+    
     game.take_turn("A3", game.computer.computer_shooting)
     require 'pry'; binding.pry
     
@@ -179,6 +180,6 @@ describe Computer do
   end 
 
   xit 'can handle longer ships' do
-    
+
   end
 end

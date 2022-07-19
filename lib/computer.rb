@@ -4,9 +4,12 @@ class Computer
               :submarine,
               :previous_shots,
               :ships_to_place,
-              :target_array
+              :target_array,
+              :first_hit,
+              :ship_directionality
 
-  attr_accessor :player_board
+  attr_accessor :player_board,
+                :first_hit
 
   def initialize
     @board = Board.new
@@ -17,6 +20,7 @@ class Computer
     @target_array = []
     @player_board = nil
     @first_hit = nil
+    @ship_directionality = nil
   end
 
   def place_ships(ship_instance, coordinate_array)
@@ -101,65 +105,78 @@ class Computer
   def computer_shot_on_first_hit
     last_shot_hit = @previous_shots.last
     @target_array = array_of_nearby_possibles(last_shot_hit)
+    @first_hit = @previous_shots.last
     take_shot_target_array
   end
 
   def computer_shooting
+    if @first_hit != nil && @player_board.cells[@first_hit].render == "X" && @player_board.cells.count { |key, cell| cell.render == "H" } >= 1
+      @first_hit = @player_board.cells.find { |key, cell| cell.render == "H" }
+      @target_array = array_of_nearby_possibles(@first_hit)
+    end
     #takes random shot at beginning of game
     return take_random_shot if @player_board.cells.count { |key, cell| cell.shot_at == true }.zero?
     #if no hits on board, take a random shot
     return take_random_shot if @player_board.cells.count { |key, cell| cell.render == "H" }.zero?
+    # first ship sunk, second ship scenario retargeting
     #keeps firing from target array until second hit
     return take_shot_target_array if @target_array != [] && !last_shot_hit?
-    #first hit, it generates the target array and begins firing at it
+    #first hit after randomly firing, it generates the target array and begins firing at it
     if (@player_board.cells.count { |key, cell| cell.render == "H" } == 1) && @target_array == [] && last_shot_hit?
     computer_shot_on_first_hit
     #Second ship hit scenario
-    elsif (@player_board.cells.count { |key, cell| cell.render == "H" } >= 2) && @target_array == [] && !last_shot_hit?
+    elsif @target_array == [] && 
+      # number of hits on board is equal to number of hits on first hit ship
+          ( @player_board.cells.count { |key, cell| cell.render == "H" } != 
+          @player_board.cells.count { |key, cell| cell.render == "H" && @player_board.cells[@first_hit].ship == cell.ship } )
     second_ship_scenario
+    take_shot_target_array
     #Second hit conditions
     elsif (@player_board.cells.count { |key, cell| cell.render == "H" } >= 2)
+      ship_directionality_assessment
       follow_up_array
       take_shot_target_array
     else
       take_random_shot
     end
   end 
-
-      # (cells.count { |cell| cell.render == "H" } == 1) && 
-
-    # Keeps on shooting from array until second hit
-
-    # Follow-up hit
       # Evaluate if ship is horizontal or vertical
-  def ship_directionality
+  def ship_directionality_assessment
     hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
-    return 'horizontal' if hits_array[0][0] == hits_array[1][0]
-    return 'vertical' if hits_array[0][1] == hits_array[1][1]
+    if hits_array[0][0] == hits_array[(hits_array.length - 1)][0]
+      @ship_directionality = 'horizontal'
+    elsif hits_array[0][1] == hits_array[(hits_array.length - 1)][1]
+      @ship_directionality = 'vertical'
+    else
+      # scattered hits
+      @ship_directionality = 'scattered'
+    end
   end
 
   def follow_up_array
     @target_array = []
     hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
-    if ship_directionality == 'horizontal'
+    if @ship_directionality == 'horizontal'
       # need to check for valid coord and not shot at for left/right coords
       left_coord = hits_array.first[0] + (hits_array.first[1].to_i - 1).to_s
       two_d_targeting_iteration(left_coord, "left")
       right_coord = hits_array.last[0] + (hits_array.last[1].to_i + 1).to_s
       two_d_targeting_iteration(right_coord, "right")
-    elsif ship_directionality == 'vertical'
+    elsif @ship_directionality == 'vertical'
       up_coord = (hits_array.first[0].ord - 1).chr.to_s + hits_array.first[1]
       two_d_targeting_iteration(up_coord, "up")
       down_coord = (hits_array.last[0].ord + 1).chr.to_s + hits_array.last[1]
       two_d_targeting_iteration(down_coord, "down")
+    else
+
     end
   end
 
   def two_d_targeting_iteration(coordinate, direction)
-    return if !board.valid_coordinate?(coordinate) || player_board.cells[coordinate].render == "M"
+    return if !board.valid_coordinate?(coordinate) || player_board.cells[coordinate].render == "M" || player_board.cells[coordinate].render == "X"
     if player_board.cells[coordinate].render == '.'
       @target_array << coordinate
-    elsif board.valid_coordinate?(coordinate)
+    else
       until player_board.cells[coordinate].render == '.'
         coordinate = 
           if direction == "right"
@@ -200,18 +217,20 @@ class Computer
       # Weeds out invalid coordinates
       # Fires random from that array
       # Repeat process of follow-up hit until ship.sunk? is true
-    #Second ship scenario
+    #Second ship scenario (still shooting at first ship)
   def second_ship_scenario
-    @first_hit = @player_board.cells.find { |key, cell| cell.render == 'H' }
-    @target_array = []
+    hits_array = []
     hits_array << @first_hit
-    if ship_directionality == 'horizontal'
+    hits_array << array_of_nearby_possibles(@first_hit)[0]
+    return @ship_directionality = 'vertical' if @ship_directionality == 'horizontal'
+    return @ship_directionality = 'horizontal' if @ship_directionality == 'vertical'
+    if @ship_directionality == 'horizontal'
       # flipped ship directionality
       left_coord = hits_array.first[0] + (hits_array.first[1].to_i - 1).to_s
       two_d_targeting_iteration(left_coord, "left")
       right_coord = hits_array.last[0] + (hits_array.last[1].to_i + 1).to_s
       two_d_targeting_iteration(right_coord, "right")
-    elsif ship_directionality == 'vertical'
+    elsif @ship_directionality == 'vertical'
       up_coord = (hits_array.first[0].ord - 1).chr.to_s + hits_array.first[1]
       two_d_targeting_iteration(up_coord, "up")
       down_coord = (hits_array.last[0].ord + 1).chr.to_s + hits_array.last[1]
