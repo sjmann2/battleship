@@ -2,6 +2,7 @@ class Board
   attr_reader :cells
 
   def initialize
+    @cell_generator = CellGenerator.new
     @cells = CellGenerator.new.cells
   end
 
@@ -21,12 +22,13 @@ class Board
     if ship_instance.length != coordinate_array.length
       return false
     end
-    #check coordinates against length of ship
+    #if coordinates length is not same as length of ship, return false
     is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))
     is_vertical = (same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance))
     if !(is_horizontal || is_vertical)
       return false
     end
+    #if coordinates are not horizontal or vertical, return false
     true
   end
 
@@ -106,10 +108,32 @@ class Board
   end
 
   def render(see_ships = false)
-    "  1 2 3 4 \n" +
-    "A #{@cells["A1"].render(see_ships)} #{@cells["A2"].render(see_ships)} #{@cells["A3"].render(see_ships)} #{@cells["A4"].render(see_ships)} \n" +
-    "B #{@cells["B1"].render(see_ships)} #{@cells["B2"].render(see_ships)} #{@cells["B3"].render(see_ships)} #{@cells["B4"].render(see_ships)} \n" +
-    "C #{@cells["C1"].render(see_ships)} #{@cells["C2"].render(see_ships)} #{@cells["C3"].render(see_ships)} #{@cells["C4"].render(see_ships)} \n" +
-    "D #{@cells["D1"].render(see_ships)} #{@cells["D2"].render(see_ships)} #{@cells["D3"].render(see_ships)} #{@cells["D4"].render(see_ships)} \n"
+    column_labels = (1..@cell_generator.width).to_a
+    #[1, 2, 3, 4]
+    row_labels = ("A"..(("A".ord + @cell_generator.height - 1).chr)).to_a
+    #["A", "B", "C", "D"]
+
+    coordinates =
+      column_labels.map { |num| row_labels.map { |letter| letter + num.to_s } }
+        .flatten!
+        .sort!
+    #["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
+    cells_render = coordinates.map { |coordinate| @cells[coordinate].render(see_ships) }
+    #[".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", ".", "."]
+    cells_render_slices = (cells_render.each_slice(@cell_generator.width).to_a)
+    #[[".", ".", ".", "."], [".", ".", ".", "."], [".", ".", ".", "."], [".", ".", ".", "."]]
+    row_label = "A".ord
+    rows_render = cells_render_slices.map do |row|
+      row_render = row.join(" ")
+      #". . . ."
+      row_render = "#{row_label.chr} #{row_render}"
+      row_label += 1
+      row_render
+      #"A . . . ."
+    end
+    # ["A . . . .", "B . . . .", "C . . . .", "D . . . ."]
+    board_render = rows_render.join(" \n")
+    #"A . . . .\nB . . . .\nC . . . .\nD . . . ."
+    return "#{column_labels.join(" ").insert(0, "  ")} \n" + board_render + " \n"
   end
 end
