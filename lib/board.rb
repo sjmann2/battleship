@@ -1,10 +1,10 @@
 class Board
-  attr_reader :cells,
-              :cell_generator
+  attr_accessor :cells,
+                :cell_generator
 
   def initialize
     @cell_generator = CellGenerator.new
-    @cells = CellGenerator.new.cells
+    @cells = @cell_generator.cells
   end
 
   def valid_coordinate?(coordinate)

@@ -7,6 +7,30 @@ class Game
     @computer = Computer.new
   end
 
+ 
+  def menu
+    puts "Welcome to the BATTLESHIP menu! Please select your board size:"
+    puts "Please enter the width in digits eg 5, maximum of 10 and minimum of 3"
+    selection_1 = gets.chomp.to_i
+    until selection_1.class == Integer && (selection_1 > 3 && selection_1 < 10)
+      puts "Invalid size, please try again"
+      selection_1 = gets.chomp.to_i
+    end
+    width = selection_1
+    puts "Please enter the height in digits eg 5, maximum of 10 and minimum of 3"
+    selection_2 = gets.chomp.to_i
+    until selection_2.class == Integer && (selection_2 > 3 && selection_2 < 10)
+      puts "Invalid size, please try again"
+      selection_2 = gets.chomp.to_i
+    end
+    height = selection_2
+
+    @player.board.cell_generator = CellGenerator.new(width, height)
+    @player.board.cells = @player.board.cell_generator.cells
+    @computer.board.cell_generator = CellGenerator.new(width, height)
+    @computer.board.cells = @computer.board.cell_generator.cells
+  end
+
   def place_ships_computer
     @computer.place_all_ships
   end
@@ -16,7 +40,7 @@ class Game
     @player.board.cells[computer_shot].fire_upon
   end
 
-  def render(player_shot, computer_shot)
+  def render
     puts "                                        "
     puts "=============COMPUTER BOARD============="
     puts @computer.board.render
@@ -80,7 +104,7 @@ class Game
     until @player.board.valid_placement?(ship_instance, player_ship_placement) == true
       p "Invalid coordinates, please try again."
 
-      player_cruiser_placement = gets.chomp
+      player_ship_placement = gets.chomp
                                     .gsub(",", " ")
                                     .upcase
                                     .split(" ")
