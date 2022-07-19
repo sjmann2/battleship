@@ -96,11 +96,11 @@ class Game
     until @player.board.valid_placement?(ship_instance, player_ship_placement) == true
       p "Invalid coordinates, please try again."
 
-      player_cruiser_placement = gets.chomp
-                                    .gsub(",", " ")
-                                    .upcase
-                                    .split(" ")
-                                    .sort
+      player_ship_placement = gets.chomp
+                                      .gsub(",", " ")
+                                      .upcase
+                                      .split(" ")
+                                      .sort
     end
     @player.place_ships(ship_instance, player_ship_placement)
     puts @player.board.render(true)

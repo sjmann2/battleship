@@ -112,14 +112,73 @@ describe Computer do
 
     expect(game.computer.last_shot_hit?).to be false
 
-    game.take_turn("A2", "A3")
+    game.take_turn("A2", "B3")
     game.computer.previous_shots << "B3"
 
-    game.take_turn("A3", "B3")
+    game.take_turn("A3", "A3")
     game.computer.previous_shots << "A3"
 
     expect(game.computer.computer_shot_on_first_hit).to eq("A2")
   end
 
+#   it 'testing' do
+#     game = Game.new
 
+#     game.player.place_ships(game.player.cruiser, ["B1", "B2", "B3"])
+#     game.player.place_ships(game.player.submarine, ["D1", "D2"])
+
+#     game.take_turn("A1", "A4")
+#     game.computer.previous_shots << "A4"
+
+#     game.take_turn("A2", "B3")
+#     game.computer.previous_shots << "B3"
+
+#     game.take_turn("A3", game.computer.computer_shooting)
+# require 'pry'; binding.pry
+    
+#     game.take_turn("A4", game.computer.computer_shooting)
+# require 'pry'; binding.pry
+
+#   game.take_turn("B1", game.computer.computer_shooting)
+# require 'pry'; binding.pry
+
+# game.take_turn("B2", game.computer.computer_shooting)
+# require 'pry'; binding.pry
+
+#   end
+
+  it 'can handle the second ship scenario' do
+    game = Game.new
+
+    game.player.place_ships(game.player.cruiser, ["B1", "B2", "B3"])
+    game.player.place_ships(game.player.submarine, ["C1", "C2"])
+
+    game.take_turn("A1", "A4")
+    game.computer.previous_shots << "A4"
+
+    game.take_turn("A2", "B1")
+    game.computer.previous_shots << "B1"
+
+    game.take_turn("A3", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+    
+    game.take_turn("A4", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+
+    game.take_turn("B1", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+
+    game.take_turn("B2", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+
+    game.take_turn("B3", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+
+    game.take_turn("B4", game.computer.computer_shooting)
+    require 'pry'; binding.pry
+  end 
+
+  xit 'can handle longer ships' do
+    
+  end
 end
