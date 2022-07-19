@@ -3,7 +3,9 @@ class Computer
               :cruiser,
               :submarine,
               :previous_shots,
-              :ships_to_place
+              :ships_to_place,
+              :target_array
+
   attr_accessor :player_board
 
   def initialize
@@ -63,7 +65,7 @@ class Computer
   # Hit! When the last random shot was a hit
   def last_shot_hit?
     return false if @previous_shots == []
-    !@player_board.cells[@previous_shots.last.coordinate].empty?
+    !@player_board.cells[@previous_shots.last].empty?
   end
 
 
@@ -87,34 +89,58 @@ class Computer
 
     # Takes a random shot of that array shuffle, then pop
 
-  def computer_shot_on_hit
-    array_of_nearby_possibles("A3").shuffle.pop
-  end
+  # def computer_shot_on_hit
+  #   array_of_nearby_possibles("A3").shuffle.pop
+  # end
 
   def computer_shot_on_first_hit
-    last_shot_hit = @previous_shots.last.coordinate
+    last_shot_hit = @previous_shots.last
     @target_array = array_of_nearby_possibles(last_shot_hit)
-    @target_array.shuffle.pop
+    @target_array.shuffle!.pop
   end
 
   def computer_shooting
     #takes random shot at beginning of game
-    return take_random_shot if cells.count { |cell| cell.shot_at == true }.zero?
+    return take_random_shot if @player_board.cells.count { |key, cell| cell.shot_at == true }.zero?
+    #if no hits on board, take a random shot
+    return take_random_shot if @player_board.cells.count { |key, cell| cell.render == "H" }.zero?
+    #keeps firing from target array until second hit
+    return @target_array.shuffle!.pop if @target_array != [] && !last_shot_hit?
     #first hit, it generates the target array and begins firing at it
-    elsif  (cells.count { |cell| cell.render == "H" } == 1) && target_array == [] && player_board.cells[@previous_shots.last.ship] != nil
+    if (@player_board.cells.count { |key, cell| cell.render == "H" } == 1) && @target_array == [] && last_shot_hit?
     computer_shot_on_first_hit
-    #keeps firing from target array
-    elsif !last_shot_hit && (target_array != [])
+    #Second hit conditions
+    elsif (@player_board.cells.count { |key, cell| cell.render == "H" } >= 2)
+      follow_up_array
       @target_array.shuffle.pop
-    elsif (cells.count { |cell| cell.render == "H" } == 2)
+    else
+      take_random_shot
+    end 
   end 
 
       # (cells.count { |cell| cell.render == "H" } == 1) && 
 
     # Keeps on shooting from array until second hit
-  
+
     # Follow-up hit
       # Evaluate if ship is horizontal or vertical
+  def ship_directionality
+    hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
+    return 'horizontal' if hits_array[0][0] == hits_array[1][0]
+    return 'vertical' if hits_array[0][1] == hits_array[1][1]
+  end
+
+  def follow_up_array
+    @target_array = []
+    hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
+    if ship_directionality == 'horizontal'
+      @target_array << left_coord = hits_array.first[0] + (hits_array.first[1].to_i - 1).to_s
+      @target_array << right_coord = hits_array.last[0] + (hits_array.last[1].to_i + 1).to_s
+    elsif ship_directionality == 'vertical'
+      @target_array << up_coord = (hits_array.first[0].ord - 1).chr.to_s + hits_array.first[1]
+      @target_array << down_coord = (hits_array.last[0].ord + 1).chr.to_s+ hits_array.last[1]
+    end
+  end
       # Generate new array of two possible next shots
         # Iterate (adding 1 to changing letter or number) until it gets
           # to a cell that hasn't been fired upon or has a miss (miss needs to end adding any elements)

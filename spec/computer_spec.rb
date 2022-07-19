@@ -66,24 +66,24 @@ describe Computer do
     game.player.place_ships(game.player.submarine, ["B1", "B2"])
 
     game.take_turn("A1", "A4")
-    game.computer.previous_shots << game.computer.board.cells["A4"]
+    game.computer.previous_shots << "A4"
     expect(game.computer.last_shot_hit?).to be false
 
     game.take_turn("A2", "A1")
-    game.computer.previous_shots << game.computer.board.cells["A1"]
+    game.computer.previous_shots << "A1"
 
     expect(game.computer.last_shot_hit?).to be true
 
     game.take_turn("A3", "B3")
-    game.computer.previous_shots << game.computer.board.cells["B3"]
+    game.computer.previous_shots << "B3"
     expect(game.computer.last_shot_hit?).to be false
 
     game.take_turn("A4", "B2")
-    game.computer.previous_shots << game.computer.board.cells["B2"]
+    game.computer.previous_shots << "B2"
     expect(game.computer.last_shot_hit?).to be true
   end
 
-  it 'can make array of possible coordinate to shoot at after hit' do
+  it 'can make array of possible coordinates to shoot at after hit' do
 
     game = Game.new
 
@@ -91,12 +91,12 @@ describe Computer do
     game.player.place_ships(game.player.submarine, ["B1", "B2"])
 
     game.take_turn("A1", "A4")
-    game.computer.previous_shots << game.computer.board.cells["A4"]
+    game.computer.previous_shots << "A4"
 
     expect(game.computer.last_shot_hit?).to be false
 
     game.take_turn("A2", "A3")
-    game.computer.previous_shots << game.computer.board.cells["A3"]
+    game.computer.previous_shots << "A3"
 
     expect(game.computer.array_of_nearby_possibles("A3")).to eq(["B3", "A2"])
   end
@@ -108,13 +108,18 @@ describe Computer do
     game.player.place_ships(game.player.submarine, ["B1", "B2"])
 
     game.take_turn("A1", "A4")
-    game.computer.previous_shots << game.computer.board.cells["A4"]
+    game.computer.previous_shots << "A4"
 
     expect(game.computer.last_shot_hit?).to be false
 
     game.take_turn("A2", "A3")
-    game.computer.previous_shots << game.computer.board.cells["A3"]
+    game.computer.previous_shots << "B3"
 
-    expect(game.computer.computer_shot_on_hit == "B3" || "A2").to eq(true)
+    game.take_turn("A3", "B3")
+    game.computer.previous_shots << "A3"
+
+    expect(game.computer.computer_shot_on_first_hit).to eq("A2")
   end
+
+
 end

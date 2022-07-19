@@ -17,7 +17,7 @@ class Game
     @player.board.cells[computer_shot].fire_upon
   end
 
-  def render(player_shot, computer_shot)
+  def render
     puts "" "
     =============COMPUTER BOARD=============" ""
     puts @computer.board.render
@@ -108,8 +108,8 @@ class Game
 
   def turns
     until end_game? == true
-      computer_shot = @computer.take_random_shot
-
+      # computer_shot = @computer.take_random_shot
+      computer_shot = computer.computer_shooting
       p 'Enter the coordinate for your shot:'
 
       player_shot = gets.chomp.upcase
