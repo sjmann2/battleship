@@ -17,8 +17,8 @@ class Game
   end
 
   def render(player_shot, computer_shot)
-    puts "" "
-    =============COMPUTER BOARD=============" ""
+    puts "                                        "
+    puts "=============COMPUTER BOARD============="
     puts @computer.board.render
     puts "==============PLAYER BOARD=============="
     puts @player.board.render(true)
@@ -54,21 +54,6 @@ class Game
       true
     else
       false
-    end
-  end
-
-  def run
-    player_input = nil
-    until player_input == "q"
-      p "Welcome to BATTLESHIP"
-      p "Enter p to play. Enter q to quit."
-      player_input = gets.chomp
-      if player_input == "p"
-        game = Game.new
-        game.ships_placement
-        game.turns
-        game.end_game
-      end
     end
   end
 
@@ -125,11 +110,12 @@ class Game
   end
 
   def end_game
-    # This conditional will lead to the computer winning in a
-    # tie situation (both side sink each others last ship on the final turn)
-    if (@player.cruiser.sunk? && @player.submarine.sunk?)
+    if (@player.cruiser.sunk? && @player.submarine.sunk?) &&
+     (@computer.cruiser.sunk? && @computer.submarine.sunk?)
+      p "Mutually assured destruction accomplished."
+    elsif (@player.cruiser.sunk? && @player.submarine.sunk?)
       p "I won, hahahahaha"
-    else
+    else 
       p "You won, nice job beating a computer..."
     end
   end
