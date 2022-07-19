@@ -27,6 +27,8 @@ describe Board do
     expect(board.valid_coordinate?("E1")).to be(false)
     expect(board.coordinates_are_on_board(["E1", "E2", "E3"])).to be(false)
     expect(board.valid_coordinate?("A22")).to be(false)
+    expect(board.valid_coordinate?("F30")).to be(false)
+    expect(board.valid_coordinate?("AFLK,J&DK:KD")).to be(false)
   end
 
   it "coordinates length should be equal to length of the ship" do

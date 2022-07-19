@@ -1,5 +1,6 @@
 class Board
-  attr_reader :cells
+  attr_reader :cells,
+              :cell_generator
 
   def initialize
     @cell_generator = CellGenerator.new
@@ -23,7 +24,7 @@ class Board
       return false
     end
     #if coordinates length is not same as length of ship, return false
-    is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))
+    is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))                
     is_vertical = (same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance))
     if !(is_horizontal || is_vertical)
       return false
@@ -33,14 +34,14 @@ class Board
   end
 
   def coordinates_are_on_board(coordinate_array)
-    valid_coordinates_array = coordinate_array.reject do |individual_coordinate|
-      !@cells.keys.include?(individual_coordinate)
+    valid_coordinates_array = coordinate_array.select do |individual_coordinate|
+      @cells.keys.include?(individual_coordinate)
       #reject coordinates if coordinate is not on the board, returns those that are
     end
     coordinate_array == valid_coordinates_array
     #returns true if inputted coordinate array is a valid coordinate array
   end
-
+#START HERE
   def consecutive_numbers_comparison(coordinate_array, ship_instance)
     numbers_coordinate_array = coordinate_array.map do |individual_coordinate|
       individual_coordinate[1]
