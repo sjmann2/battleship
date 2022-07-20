@@ -5,6 +5,7 @@ class Game
   def initialize
     @player = Player.new
     @computer = Computer.new
+    @computer.player_board = @player.board
   end
 
  
@@ -116,8 +117,8 @@ class Game
 
   def turns
     until end_game? == true
-      computer_shot = @computer.take_random_shot
-
+      # computer_shot = @computer.take_random_shot
+      computer_shot = computer.computer_shooting
       p 'Enter the coordinate for your shot:'
 
       player_shot = gets.chomp.upcase
