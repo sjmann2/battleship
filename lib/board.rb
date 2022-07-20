@@ -24,7 +24,7 @@ class Board
       return false
     end
     #if coordinates length is not same as length of ship, return false
-    is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))                
+    is_horizontal = (consecutive_numbers_comparison(coordinate_array, ship_instance) && same_letters_comparison(coordinate_array, ship_instance))
     is_vertical = (same_numbers_comparison(coordinate_array, ship_instance) && consecutive_letters_comparison(coordinate_array, ship_instance))
     if !(is_horizontal || is_vertical)
       return false
@@ -110,10 +110,8 @@ class Board
 
   def render(see_ships = false)
     column_labels = (1..@cell_generator.width).to_a
-    #[1, 2, 3, 4]
     row_labels = ("A"..(("A".ord + @cell_generator.height - 1).chr)).to_a
-    #["A", "B", "C", "D"]
-
+    
     coordinates =
       column_labels.map { |num| row_labels.map { |letter| letter + num.to_s } }
         .flatten!
