@@ -20,6 +20,14 @@ describe Game do
     expect(game.player).to be_instance_of(Player)
   end
 
+  it "can place the computer's ships" do
+    game = Game.new
+
+    game.place_ships_computer
+
+    expect(game.computer.board.cells.count { |cell_name, cell| cell.ship != nil }).to eq(5)
+  end
+
   it "can take a turn" do
     game = Game.new
 
@@ -69,17 +77,5 @@ describe Game do
     game.take_turn("B2", "B2")
 
     expect(game.end_game?).to eq(true)
-  end
-
-  it "places ships on board" do
-    game = Game.new
-    
-    game.player.place_ships(game.player.cruiser, ["A1", "A2", "A3"])
-    game.player.place_ships(game.player.submarine, ["B1", "B2"])
-    
-    expect(game.player.board.cells["A1"].empty?).to be(false)
-    expect(game.place_ships_computer).to be_instance_of(Array)
-    #I had trouble testing place ships computer--spent too long staring at it feel free
-    #different test
   end
 end

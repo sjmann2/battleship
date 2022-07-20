@@ -27,6 +27,8 @@ describe Board do
     expect(board.valid_coordinate?("E1")).to be(false)
     expect(board.coordinates_are_on_board(["E1", "E2", "E3"])).to be(false)
     expect(board.valid_coordinate?("A22")).to be(false)
+    expect(board.valid_coordinate?("F30")).to be(false)
+    expect(board.valid_coordinate?("AFLK,J&DK:KD")).to be(false)
   end
 
   it "coordinates length should be equal to length of the ship" do
@@ -36,6 +38,9 @@ describe Board do
 
     expect(board.valid_placement?(cruiser, ["A1", "A2"])).to be(false)
     expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to be(false)
+    expect(board.valid_placement?(cruiser, ["A1", "A2", "A3"])).to be(true)
+    expect(board.valid_placement?(submarine, ["A2", "A3"])).to be(true)
+
   end
 
   it "coordinates should be consecutive and in ascending order" do
@@ -57,6 +62,20 @@ describe Board do
     expect(board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to be(true)
   end
 
+  it "cant have overlapping ships" do
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+
+    expect(board.valid_placement?(cruiser, ["A1", "A2", "A3"])).to be(true)
+
+    board.place(cruiser, ["A1", "A2", "A3"])
+
+    expect(board.valid_placement?(submarine, ["A1", "B1"])).to be(false)
+    expect(board.valid_placement?(submarine, ["A2", "B2"])).to be(false)
+    expect(board.valid_placement?(submarine, ["A3", "B3"])).to be(false)
+  end
+
   it "can place ships" do
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
@@ -69,18 +88,6 @@ describe Board do
     expect(cell_1.ship).to eq(cruiser)
     expect(cell_2.ship).to eq(cruiser)
     expect(cell_3.ship).to eq(cruiser)
-  end
-
-  it "cant have overlapping ships" do
-    board = Board.new
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
-
-    expect(board.valid_placement?(cruiser, ["A1", "A2", "A3"])).to be(true)
-
-    board.place(cruiser, ["A1", "A2", "A3"])
-
-    expect(board.valid_placement?(submarine, ["A1", "B1"])).to be(false)
   end
 
   it "can render a board" do

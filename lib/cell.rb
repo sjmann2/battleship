@@ -18,7 +18,7 @@ class Cell
   end
 
   def fired_upon?
-    @ship.health < @ship.length && @ship.health >= 0
+    @shot_at
   end
 
   def fire_upon
