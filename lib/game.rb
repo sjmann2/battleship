@@ -11,19 +11,19 @@ class Game
   def menu
     puts "Welcome to the BATTLESHIP menu! Please select your board size:"
     puts "Please enter the width in digits eg 5, maximum of 10 and minimum of 3"
-    selection_1 = gets.chomp.to_i
-    until selection_1.class == Integer && (selection_1 > 3 && selection_1 < 10)
+    selection_1 = gets.chomp
+    until selection_1.to_i > 2 && selection_1.to_i < 11 && !selection_1.include?(".")
       puts "Invalid size, please try again"
-      selection_1 = gets.chomp.to_i
+      selection_1 = gets.chomp
     end
-    width = selection_1
+    width = selection_1.to_i
     puts "Please enter the height in digits eg 5, maximum of 10 and minimum of 3"
-    selection_2 = gets.chomp.to_i
-    until selection_2.class == Integer && (selection_2 > 3 && selection_2 < 10)
+    selection_2 = gets.chomp
+    until selection_2.to_i > 2 && selection_2.to_i < 11 && !selection_1.include?(".")
       puts "Invalid size, please try again"
-      selection_2 = gets.chomp.to_i
+      selection_2 = gets.chomp
     end
-    height = selection_2
+    height = selection_2.to_i
 
     @player.board.cell_generator = CellGenerator.new(width, height)
     @player.board.cells = @player.board.cell_generator.cells
