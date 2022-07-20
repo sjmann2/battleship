@@ -7,7 +7,7 @@ require "./lib/player"
 require "./lib/computer"
 
 def run
-    player_input = nil
+  player_input = nil
   until player_input == "q"
     p "Welcome to BATTLESHIP"
     p "Enter p to play. Enter q to quit."
@@ -23,4 +23,4 @@ def run
   puts "Goodbye.."
 end
 
-p run
+print run

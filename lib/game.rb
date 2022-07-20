@@ -8,7 +8,6 @@ class Game
     @computer.player_board = @player.board
   end
 
- 
   def menu
     puts "Welcome to the BATTLESHIP menu! Please select your board size:"
     puts "Please enter the width in digits eg 5, maximum of 10 and minimum of 3"
@@ -98,18 +97,18 @@ class Game
     puts "Enter the squares for the #{ship_instance.name} (#{ship_instance.length} spaces):"
     puts "Please enter coordinates in the proper format, with either a space or comma between each coordinate."
     player_ship_placement = gets.chomp
-            .gsub(",", " ")
-            .upcase
-            .split(" ")
-            .sort
+      .gsub(",", " ")
+      .upcase
+      .split(" ")
+      .sort
     until @player.board.valid_placement?(ship_instance, player_ship_placement) == true
       p "Invalid coordinates, please try again."
 
       player_ship_placement = gets.chomp
-                                    .gsub(",", " ")
-                                    .upcase
-                                    .split(" ")
-                                    .sort
+        .gsub(",", " ")
+        .upcase
+        .split(" ")
+        .sort
     end
     @player.place_ships(ship_instance, player_ship_placement)
     puts @player.board.render(true)
@@ -119,12 +118,12 @@ class Game
     until end_game? == true
       # computer_shot = @computer.take_random_shot
       computer_shot = computer.computer_shooting
-      p 'Enter the coordinate for your shot:'
+      p "Enter the coordinate for your shot:"
 
       player_shot = gets.chomp.upcase
 
       until @computer.board.valid_coordinate?(player_shot) && !@computer.board.cells[player_shot].shot_at
-        p 'Invalid coordinates, please try again.'
+        p "Invalid coordinates, please try again."
         player_shot = gets.chomp.upcase
       end
 
@@ -136,11 +135,11 @@ class Game
 
   def end_game
     if (@player.cruiser.sunk? && @player.submarine.sunk?) &&
-     (@computer.cruiser.sunk? && @computer.submarine.sunk?)
+       (@computer.cruiser.sunk? && @computer.submarine.sunk?)
       p "Mutually assured destruction accomplished."
     elsif (@player.cruiser.sunk? && @player.submarine.sunk?)
       p "I won, hahahahaha"
-    else 
+    else
       p "You won, nice job beating a computer..."
     end
   end

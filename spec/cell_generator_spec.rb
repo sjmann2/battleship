@@ -8,7 +8,6 @@ describe CellGenerator do
     expect(cells).to be_instance_of(CellGenerator)
   end
 
-
   it "has a default width and a height" do
     cells = CellGenerator.new
 
