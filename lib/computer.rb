@@ -28,8 +28,6 @@ class Computer
   def place_ships(ship_instance, coordinate_array)
     if board.valid_placement?(ship_instance, coordinate_array)
       board.place(ship_instance, coordinate_array)
-    else
-      "Invalid coordinates try again"
     end
   end
 
@@ -51,7 +49,7 @@ class Computer
   def place_all_ships
     @ships_to_place << @cruiser
     @ships_to_place << @submarine
-    ships_placement = @ships_to_place.map do |ship|
+    @ships_to_place.map do |ship|
       [ship, place_ships(ship, random_computer_ship_placement(ship))]
     end
   end
@@ -64,10 +62,6 @@ class Computer
     @previous_shots << random_shot
     random_shot
   end
-  
-  
-  # Random shot from a more intelligent shooting pattern
-  # checkerboard shooting
 
   # Hit! When the last random shot was a hit
   def last_shot_hit?
@@ -75,75 +69,74 @@ class Computer
     !@player_board.cells[@previous_shots.last].empty?
   end
 
-
-    # Makes an array of the 1-4 coordinates that are eligible and around the hit location
+  # Makes an array of the 1-4 coordinates that are eligible and around the hit location
   def array_of_nearby_possibles(coordinate)
     nearby_array = []
-    #right
+    # right
     nearby_array << move_coordinate_right(coordinate)
-    #up
+    # up
     nearby_array << move_coordinate_up(coordinate)
-    #down
+    # down
     nearby_array << move_coordinate_down(coordinate)
-    #left
+    # left
     nearby_array << move_coordinate_left(coordinate)
-    #remove positions not on board or already shot at
+    # remove positions not on board or already shot at
     nearby_array = nearby_array.select do |coordinate| 
       board.valid_coordinate?(coordinate) && !player_board.cells[coordinate].shot_at
     end
     nearby_array
   end
-
+  # Takes a random shot of that array shuffle, then pop
   def take_shot_target_array
     @previous_shots << @target_array.shuffle!.pop
     @previous_shots.last
   end
-    # Takes a random shot of that array shuffle, then pop
 
-  # def computer_shot_on_hit
-  #   array_of_nearby_possibles("A3").shuffle.pop
-  # end
+  def number_of_hits
+    @player_board.cells.count { |key, cell| cell.render == "H" }
+  end
 
   def computer_shot_on_first_hit
-    last_shot_hit = @previous_shots.last
-    @target_array = array_of_nearby_possibles(last_shot_hit)
+    @target_array = array_of_nearby_possibles(@previous_shots.last)
     @first_hit = @previous_shots.last
     take_shot_target_array
   end
 
   def computer_shooting
-    # if the targeted ship is sunk and there are still outstanding hits on the board, find the outstanding hit and add its nearby's to the target array
-    # essentially cleaning up the aftermath of a second ship scenario
-    if @first_hit != nil && @player_board.cells[@first_hit].render == "X" && @player_board.cells.count { |key, cell| cell.render == "H" } >= 1
+    # if the targeted ship is sunk and there are still outstanding hits on the board, 
+    # find the outstanding hit and add its nearby's to the target array
+    if @first_hit != nil && @player_board.cells[@first_hit].render == "X" && number_of_hits >= 1
       @first_hit = @player_board.cells.find { |key, cell| cell.render == "H" }.first
-      require 'pry'; binding.pry
       @target_array = array_of_nearby_possibles(@first_hit)
       @is_second_ship_scenario = false
       return take_shot_target_array
     end
+    # 
     if @first_hit != nil && @player_board.cells[@first_hit].render == "X"
       @is_second_ship_scenario = false
     end
-    #takes random shot at beginning of game
+    # takes random shot at beginning of game
     return take_random_shot if @player_board.cells.count { |key, cell| cell.shot_at == true }.zero?
-    #if no hits on board, take a random shot
-    return take_random_shot if @player_board.cells.count { |key, cell| cell.render == "H" }.zero?
-    #keeps firing from target array until second hit
+    # if no hits on board, take a random shot
+    return take_random_shot if number_of_hits.zero?
+    # keeps firing from target array until second hit
     return take_shot_target_array if @target_array != [] && !last_shot_hit?
-    #first hit after randomly firing, it generates the target array and begins firing at it
-    if (@player_board.cells.count { |key, cell| cell.render == "H" } == 1) && @target_array == [] && last_shot_hit?
+    # first hit after randomly firing, it generates the target array and begins firing at it
+    if (number_of_hits == 1) && @target_array == [] && last_shot_hit?
     computer_shot_on_first_hit
-    #Second ship hit scenario
+    # Second ship hit scenario
     elsif @target_array == [] && 
       # number of hits on board is equal to number of hits on first hit ship
-      ( @player_board.cells.count { |key, cell| cell.render == "H" } != 
-        @player_board.cells.count { |key, cell| cell.render == "H" && @player_board.cells[@first_hit].ship == cell.ship } )
-    require 'pry'; binding.pry
+      ( number_of_hits != 
+        @player_board.cells.count do |key, cell| 
+          cell.render == "H" && @player_board.cells[@first_hit].ship == cell.ship
+        end
+      )
       @is_second_ship_scenario = true
       follow_up_array
       take_shot_target_array
-    #Second hit conditions
-    elsif (@player_board.cells.count { |key, cell| cell.render == "H" } >= 2)
+    # Second hit conditions
+    elsif number_of_hits >= 2
       ship_directionality_assessment
       follow_up_array
       take_shot_target_array
@@ -151,22 +144,19 @@ class Computer
       take_random_shot
     end
   end 
-      # Evaluate if ship is horizontal or vertical
+
+  # Evaluate if ship is horizontal or vertical
   def ship_directionality_assessment
     hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
     if hits_array[0][0] == hits_array[(hits_array.length - 1)][0]
       @ship_directionality = 'horizontal'
     elsif hits_array[0][1] == hits_array[(hits_array.length - 1)][1]
       @ship_directionality = 'vertical'
-    else
-      # scattered hits
-      @ship_directionality = 'scattered'
     end
   end
 
   def follow_up_array
     @target_array = []
-    require 'pry'; binding.pry
     hits_array = @player_board.cells.select { |key, cell| cell.render == "H" }.keys.sort
     if @is_second_ship_scenario == false
       if @ship_directionality == 'horizontal'
@@ -204,7 +194,9 @@ class Computer
   end
 
   def two_d_targeting_iteration(coordinate, direction)
-    return if !board.valid_coordinate?(coordinate) || player_board.cells[coordinate].render == "M" || player_board.cells[coordinate].render == "X"
+    return if !board.valid_coordinate?(coordinate) 
+    return if player_board.cells[coordinate].render == "M" 
+    return if player_board.cells[coordinate].render == "X"
     if player_board.cells[coordinate].render == '.'
       @target_array << coordinate
     else
@@ -241,19 +233,4 @@ class Computer
   def move_coordinate_down(coordinate)
     (coordinate[0].ord + 1).chr.to_s + coordinate[1]
   end
-
-      # Generate new array of two possible next shots
-        # Iterate (adding 1 to changing letter or number) until it gets
-          # to a cell that hasn't been fired upon or has a miss (miss needs to end adding any elements)
-      # Weeds out invalid coordinates
-      # Fires random from that array
-      # Repeat process of follow-up hit until ship.sunk? is true
-    #Second ship scenario (still shooting at first ship)
-
-
-      # If it exhausts that situation, pop out of loop also with a re-evaluation of the shots
-      #IMPORTANT create variable that saves first hit location for this to work
-      # Reruns follow-up hit but switches evaluation of ship horizontal/vertical
-        #Horiz/vert probably also needs to be saved variable then
-
 end
